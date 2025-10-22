@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="zh-CN">
+ <head> 
+  <meta charset="utf-8"> 
+  <link rel="canonical" href="https://blog.csdn.net/xlbwzz/article/details/130079248"> 
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+  <meta name="renderer" content="webkit"> 
+  <meta name="force-rendering" content="webkit"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
+  <meta name="report" content="{&quot;pid&quot;: &quot;blog&quot;, &quot;spm&quot;:&quot;1001.2101&quot;}"> 
+  <meta name="referrer" content="always"> 
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="alternate" media="handheld" href="#">  
+  <meta name="applicable-device" content="pc"> 
+  <link href="https://g.csdnimg.cn/static/logo/favicon32.ico" rel="shortcut icon" type="image/x-icon"> 
+  <title>Ubuntu20.04用D435i运行VINS-Mono_no previous pose graph-CSDN博客</title>  
+  <meta name="keywords" content="no previous pose graph"> 
+  <meta name="csdn-baidu-search" content="{&quot;autorun&quot;:true,&quot;install&quot;:true,&quot;keyword&quot;:&quot;no previous pose graph&quot;}"> 
+  <meta name="description" content="文章浏览阅读3.1k次，点赞13次，收藏77次。搜到的一些资料都是Ubuntu16.04下用D435i运行VINS-Mono，ros版本都是Kinetic，对于Ubuntu20.04下的noetic版本的ros的资料较少，走了一些坑，终于算是跑起来了，记录一下过程_no previous pose graph"> 
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/css/detail_enter-96813d3f7c.min.css">  
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/themesSkin/skin-sea/skin-sea-d3a08c2048.min.css">    
+  <meta name="toolbar" content="{&quot;type&quot;:&quot;0&quot;,&quot;fixModel&quot;:&quot;1&quot;}">   
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css"> 
+  <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>      
+ 	<style>
+	main div.blog-content-box pre {
+		max-height: 100%;
+		overflow-y: hidden;
+	}
+	</style>
+ </head>  
+ <body class="nodata  " style=""> 
+  <div id="toolbarBox" style="min-height: 48px;"></div>    
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/pc/css/blog_code-01256533b5.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/chart-3456820cac.css"> 
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/swiper/6.0.4/css/swiper.css">   
+  <div class="main_father clearfix d-flex justify-content-center mainfather-concision" style="height:100%;"> 
+   <div class="container clearfix container-concision" id="mainBox">  
+    <main>  
+     <div class="blog-content-box"> 
+      <div class="article-header-box"> 
+       <div class="article-header"> 
+        <div class="article-title-box"> 
+         <h1 class="title-article" id="articleContentId">Ubuntu20.04用D435i运行VINS-Mono</h1> 
+        </div>  
+       </div> 
+      </div> 
+      <div id="blogHuaweiyunAdvert" class=""></div> 
+      <article class="baidu_pl"> 
+       <div id="article_content" class="article_content clearfix"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-10bf609291.css"> 
+        <div id="content_views" class="markdown_views prism-atom-one-dark"> 
+         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"> 
+          <path stroke-linecap="round" d="M5,0 0,2.5 5,5z" id="raphael-marker-block" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path> 
+         </svg> 
+         <p></p> 
+         <div class="toc"> 
+          <h4>Ubuntu20.04用D435i运行VINS-Mono</h4> 
+          <ul>
+           <li><a href="#VINSMono_15">一、安装VINS-Mono</a></li>
+           <li>
+            <ul>
+             <li><a href="#1rosros_19">1.首先安装需要的ros包，如果安装的是完整ros，应该是都安装过的</a></li>
+             <li><a href="#2ceres_solverVINSMono_23">2.安装ceres solver，进VINS-Mono给的链接：</a></li>
+             <li><a href="#3VINSMono_108">3.安装VINS-Mono</a></li>
+            </ul> </li>
+           <li><a href="#realsense_150">二、安装realsense</a></li>
+           <li>
+            <ul>
+             <li><a href="#1_151">1.安装相机驱动</a></li>
+             <li><a href="#2realsenseros_183">2.安装realsense-ros</a></li>
+            </ul> </li>
+           <li><a href="#D435iVINSMono_234">三、用D435i运行VINS-Mono</a></li>
+           <li>
+            <ul>
+             <li><a href="#1realsensers_cameralaunch_238">1.修改realsense包里的rs_camera.launch文件</a></li>
+             <li><a href="#2VINSMonorealsense_color_configyaml_252">2.修改VINS-Mono包里的realsense_color_config.yaml文件</a></li>
+             <li><a href="#3VINSMono_314">3.打开相机，运行VINS-Mono</a></li>
+            </ul> </li>
+          </ul> 
+         </div> 
+         <br> 搜到的一些资料都是Ubuntu16.04下用D435i运行VINS-Mono，ros版本都是Kinetic，对于Ubuntu20.04下的noetic版本的ros的资料较少，走了一些坑，终于算是跑起来了，记录一下过程 
+         <br> 电脑配置：Intel NUC 12WSKi5（8+512） 
+         <br> 系统：Ubuntu20.04 
+         <br> ros版本：noetic 
+         <p></p> 
+         <p>参考：<a href="https://blog.csdn.net/qq_41839222/article/details/86552367">https://blog.csdn.net/qq_41839222/article/details/86552367</a><br> <a href="https://blog.csdn.net/weixin_44580210/article/details/89789416">https://blog.csdn.net/weixin_44580210/article/details/89789416</a><br> <a href="https://blog.csdn.net/Chasinglight/article/details/128328183">https://blog.csdn.net/Chasinglight/article/details/128328183</a><br> <a href="https://blog.csdn.net/zardforever123/article/details/129042974">https://blog.csdn.net/zardforever123/article/details/129042974</a></p> 
+         <p>前置要求：<br> 1.已经安装完成Ubuntu20.04系统<br> 2.已经安装完成ROS-noetic<br> 3.更换过国内源，并且有梯子（有些步骤如果下载缓慢就需要梯子）</p> 
+         <h2><a id="VINSMono_15"></a>一、安装VINS-Mono</h2> 
+         <p>直接进入VINS-Mono在Github的开源地址：<br> <a href="https://github.com/HKUST-Aerial-Robotics/VINS-Mono">https://github.com/HKUST-Aerial-Robotics/VINS-Mono</a><br> 根据里面的步骤：</p> 
+         <h3><a id="1rosros_19"></a>1.首先安装需要的ros包，如果安装的是完整ros，应该是都安装过的</h3> 
+         <pre><code class="prism language-javascript">sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install ros<span class="token operator">-</span>noetic<span class="token operator">-</span>cv<span class="token operator">-</span>bridge ros<span class="token operator">-</span>noetic<span class="token operator">-</span>tf ros<span class="token operator">-</span>noetic<span class="token operator">-</span>message<span class="token operator">-</span>filters ros<span class="token operator">-</span>noetic<span class="token operator">-</span>image<span class="token operator">-</span>transport
+</code ></pre> 
+         <h3><a id="2ceres_solverVINSMono_23"></a>2.安装ceres solver，进VINS-Mono给的链接：</h3> 
+         <p><a href="http://ceres-solver.org/installation.html" rel="nofollow">http://ceres-solver.org/installation.html</a><br> 根据官网步骤：<br> 首先安装依赖glog和eigen3：终端中逐行输入以下代码</p> 
+         <pre><code class="prism language-javascript"># CMake
+sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install cmake
+# google<span class="token operator">-</span>glog <span class="token operator">+</span> gflags
+sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install libgoogle<span class="token operator">-</span>glog<span class="token operator">-</span>dev libgflags<span class="token operator">-</span>dev
+# Use <span class="token constant">ATLAS</span> <span class="token keyword">for</span> <span class="token constant">BLAS</span> <span class="token operator">&amp;</span> <span class="token constant">LAPACK</span>
+sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install libatlas<span class="token operator">-</span>base<span class="token operator">-</span>dev
+# Eigen3
+sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install libeigen3<span class="token operator">-</span>dev
+# <span class="token function">SuiteSparse</span> <span class="token punctuation">(</span>optional<span class="token punctuation">)</span>
+sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install libsuitesparse<span class="token operator">-</span>dev
+</code ></pre> 
+         <p>将下载好的<a href="http://ceres-solver.org/ceres-solver-2.1.0.tar.gz" rel="nofollow">ceres-solver-2.1.0.tar.gz</a>移到主目录下，在主目录下打开终端：逐行输入以下代码</p> 
+         <pre><code class="prism language-javascript">tar zxf ceres<span class="token operator">-</span>solver<span class="token operator">-</span><span class="token number">2.1</span><span class="token number">.0</span><span class="token punctuation">.</span>tar<span class="token punctuation">.</span>gz
+mkdir ceres<span class="token operator">-</span>bin
+cd ceres<span class="token operator">-</span>bin
+cmake <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token operator">/</span>ceres<span class="token operator">-</span>solver<span class="token operator">-</span><span class="token number">2.1</span><span class="token number">.0</span>
+make <span class="token operator">-</span>j3
+make test
+# Optionally install Ceres<span class="token punctuation">,</span> it can also be exported using CMake which
+# allows Ceres to be used without requiring installation<span class="token punctuation">,</span> see the documentation
+# <span class="token keyword">for</span> the <span class="token constant">EXPORT_BUILD_DIR</span> option <span class="token keyword">for</span> more information<span class="token punctuation">.</span>
+sudo make install
+</code ></pre> 
+         <p>安装完成后验证安装：</p> 
+         <pre><code class="prism language-javascript">bin<span class="token operator">/</span>simple_bundle_adjuster <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token operator">/</span>ceres<span class="token operator">-</span>solver<span class="token operator">-</span><span class="token number">2.1</span><span class="token number">.0</span><span class="token operator">/</span>data<span class="token operator">/</span>problem<span class="token operator">-</span><span class="token number">16</span><span class="token operator">-</span><span class="token number">22106</span><span class="token operator">-</span>pre<span class="token punctuation">.</span>txt
+</code ></pre> 
+         <p>输出跟官网一致则ceres solver安装成功：</p> 
+         <pre><code  style="height: 50vh;" class="prism language-javascript">  iter      cost      cost_change  <span class="token operator">|</span>gradient<span class="token operator">|</span>   <span class="token operator">|</span>step<span class="token operator">|</span>    tr_ratio  tr_radius  ls_iter  iter_time  total_time
+     <span class="token number">0</span>  <span class="token number">4.185660e+06</span>    <span class="token number">0.00e+00</span>    <span class="token number">1.09e+08</span>   <span class="token number">0.00e+00</span>   <span class="token number">0.00e+00</span>  <span class="token number">1.00e+04</span>       <span class="token number">0</span>    <span class="token number">7.59e-02</span>    <span class="token number">3.37e-01</span>
+     <span class="token number">1</span>  <span class="token number">1.062590e+05</span>    <span class="token number">4.08e+06</span>    <span class="token number">8.99e+06</span>   <span class="token number">5.36e+02</span>   <span class="token number">9.82e-01</span>  <span class="token number">3.00e+04</span>       <span class="token number">1</span>    <span class="token number">1.65e-01</span>    <span class="token number">5.03e-01</span>
+     <span class="token number">2</span>  <span class="token number">4.992817e+04</span>    <span class="token number">5.63e+04</span>    <span class="token number">8.32e+06</span>   <span class="token number">3.19e+02</span>   <span class="token number">6.52e-01</span>  <span class="token number">3.09e+04</span>       <span class="token number">1</span>    <span class="token number">1.45e-01</span>    <span class="token number">6.48e-01</span>
+     <span class="token number">3</span>  <span class="token number">1.899774e+04</span>    <span class="token number">3.09e+04</span>    <span class="token number">1.60e+06</span>   <span class="token number">1.24e+02</span>   <span class="token number">9.77e-01</span>  <span class="token number">9.26e+04</span>       <span class="token number">1</span>    <span class="token number">1.43e-01</span>    <span class="token number">7.92e-01</span>
+     <span class="token number">4</span>  <span class="token number">1.808729e+04</span>    <span class="token number">9.10e+02</span>    <span class="token number">3.97e+05</span>   <span class="token number">6.39e+01</span>   <span class="token number">9.51e-01</span>  <span class="token number">2.78e+05</span>       <span class="token number">1</span>    <span class="token number">1.45e-01</span>    <span class="token number">9.36e-01</span>
+     <span class="token number">5</span>  <span class="token number">1.803399e+04</span>    <span class="token number">5.33e+01</span>    <span class="token number">1.48e+04</span>   <span class="token number">1.23e+01</span>   <span class="token number">9.99e-01</span>  <span class="token number">8.33e+05</span>       <span class="token number">1</span>    <span class="token number">1.45e-01</span>    <span class="token number">1.08e+00</span>
+     <span class="token number">6</span>  <span class="token number">1.803390e+04</span>    <span class="token number">9.02e-02</span>    <span class="token number">6.35e+01</span>   <span class="token number">8.00e-01</span>   <span class="token number">1.00e+00</span>  <span class="token number">2.50e+06</span>       <span class="token number">1</span>    <span class="token number">1.50e-01</span>    <span class="token number">1.23e+00</span>
+
+Solver <span class="token function">Summary</span> <span class="token punctuation">(</span>v <span class="token number">2.1</span><span class="token number">.0</span><span class="token operator">-</span>eigen<span class="token operator">-</span><span class="token punctuation">(</span><span class="token number">3.4</span><span class="token number">.0</span><span class="token punctuation">)</span><span class="token operator">-</span>lapack<span class="token operator">-</span>suitesparse<span class="token operator">-</span><span class="token punctuation">(</span><span class="token number">5.10</span><span class="token number">.1</span><span class="token punctuation">)</span><span class="token operator">-</span>acceleratesparse<span class="token operator">-</span>eigensparse<span class="token operator">-</span>no_openmp<span class="token punctuation">)</span>
+
+                                     Original                  Reduced
+Parameter blocks                        <span class="token number">22122</span>                    <span class="token number">22122</span>
+Parameters                              <span class="token number">66462</span>                    <span class="token number">66462</span>
+Residual blocks                         <span class="token number">83718</span>                    <span class="token number">83718</span>
+Residuals                              <span class="token number">167436</span>                   <span class="token number">167436</span>
+
+Minimizer                        <span class="token constant">TRUST_REGION</span>
+
+Dense linear algebra library            <span class="token constant">EIGEN</span>
+Trust region strategy     <span class="token constant">LEVENBERG_MARQUARDT</span>
+
+                                        Given                     Used
+Linear solver                     <span class="token constant">DENSE_SCHUR</span>              <span class="token constant">DENSE_SCHUR</span>
+Threads                                     <span class="token number">1</span>                        <span class="token number">1</span>
+Linear solver ordering              <span class="token constant">AUTOMATIC</span>                 <span class="token number">22106</span><span class="token punctuation">,</span><span class="token number">16</span>
+Schur structure                         <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">9</span>                    <span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">9</span>
+
+<span class="token literal-property property">Cost</span><span class="token operator">:</span>
+Initial                          <span class="token number">4.185660e+06</span>
+Final                            <span class="token number">1.803390e+04</span>
+Change                           <span class="token number">4.167626e+06</span>
+
+Minimizer iterations                        <span class="token number">7</span>
+Successful steps                            <span class="token number">7</span>
+Unsuccessful steps                          <span class="token number">0</span>
+
+<span class="token function">Time</span> <span class="token punctuation">(</span><span class="token keyword">in</span> seconds<span class="token punctuation">)</span><span class="token operator">:</span>
+Preprocessor                         <span class="token number">0.121654</span>
+
+  Residual only evaluation           <span class="token number">0.065968</span> <span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span>
+  Jacobian <span class="token operator">&amp;</span> residual evaluation     <span class="token number">0.303356</span> <span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span>
+  Linear solver                      <span class="token number">0.436650</span> <span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span>
+Minimizer                            <span class="token number">0.890535</span>
+
+Postprocessor                        <span class="token number">0.001684</span>
+Total                                <span class="token number">1.013873</span>
+
+<span class="token literal-property property">Termination</span><span class="token operator">:</span>                      <span class="token constant">CONVERGENCE</span> <span class="token punctuation">(</span>Function tolerance reached<span class="token punctuation">.</span> <span class="token operator">|</span>cost_change<span class="token operator">|</span><span class="token operator">/</span>cost<span class="token operator">:</span> <span class="token number">1.769756e-09</span> <span class="token operator">&lt;=</span> <span class="token number">1.000000e-06</span><span class="token punctuation">)</span>
+</code ></pre> 
+         <h3><a id="3VINSMono_108"></a>3.安装VINS-Mono</h3> 
+         <p>主目录下新建一个工作空间，拷下VINS-Mono的github代码</p> 
+         <pre><code class="prism language-javascript">mkdir <span class="token operator">-</span>p <span class="token operator">~</span><span class="token operator">/</span>vinsmono_ws<span class="token operator">/</span>src
+cd <span class="token operator">~</span><span class="token operator">/</span>vinsmono_ws<span class="token operator">/</span>src
+git clone https<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span><span class="token constant">HKUST</span><span class="token operator">-</span>Aerial<span class="token operator">-</span>Robotics<span class="token operator">/</span><span class="token constant">VINS</span><span class="token operator">-</span>Mono<span class="token punctuation">.</span>git
+</code ></pre> 
+         <p>然后需要对拷下来的代码进行更改以适配Ubuntu20.04和ros noetic<br> 更改1：将所有文件夹下的<code>CMakeLists.txt</code >文件由C++11全部修改为C++14编译，具体有ar_demo，benchmark_publisher，camera_model，feature_tracker，pose_graph，vins_estimator这些文件夹</p> 
+         <pre><code class="prism language-javascript"><span class="token function">#set</span><span class="token punctuation">(</span><span class="token constant">CMAKE_CXX_FLAGS</span> <span class="token string">"-std=c++11"</span><span class="token punctuation">)</span>
+<span class="token function">set</span><span class="token punctuation">(</span><span class="token constant">CMAKE_CXX_FLAGS</span> <span class="token string">"-std=c++14"</span><span class="token punctuation">)</span>
+</code ></pre> 
+         <p>ROS noetic版本自带OpenCV4，而VINS-Mono中开发使用的是OpenCV3，修改VINS-Mono代码兼容OpenCV4。<br> 更改2：在camera_model/include/chessboard下的头文件<code>Chessboard.h</code >中添加</p> 
+         <pre><code class="prism language-javascript">#include <span class="token operator">&lt;</span>opencv2<span class="token operator">/</span>imgproc<span class="token operator">/</span>types_c<span class="token punctuation">.</span>h<span class="token operator">&gt;</span>
+#include <span class="token operator">&lt;</span>opencv2<span class="token operator">/</span>calib3d<span class="token operator">/</span>calib3d_c<span class="token punctuation">.</span>h<span class="token operator">&gt;</span>
+</code ></pre> 
+         <p>更改3：在camera_model/include/calib的头文件<code>CameraCalibration.h</code >、pose_graph/src下的头文件<code>pose_graph.h</code >和<code>keyframe.h</code >以及pose_graph/src/ThirdParty/DVision下的头文件<code>BRIEF.h</code >中添加</p> 
+         <pre><code class="prism language-javascript">#include <span class="token operator">&lt;</span>opencv2<span class="token operator">/</span>imgproc<span class="token operator">/</span>types_c<span class="token punctuation">.</span>h<span class="token operator">&gt;</span>
+#include <span class="token operator">&lt;</span>opencv2<span class="token operator">/</span>imgproc<span class="token operator">/</span>imgproc_c<span class="token punctuation">.</span>h<span class="token operator">&gt;</span>
+</code ></pre> 
+         <p>更改完成，之后编译文件</p> 
+         <pre><code class="prism language-javascript">cd <span class="token operator">~</span><span class="token operator">/</span>vinsmono_ws
+catkin_make
+echo <span class="token string">"source ~/vinsmono_ws/devel/setup.bash"</span> <span class="token operator">&gt;&gt;</span> <span class="token operator">~</span><span class="token operator">/</span><span class="token punctuation">.</span>bashrc
+</code ></pre> 
+         <p>运行之前在对应的配置文件<code>***_config.yaml</code >中修改结果输出目录，比如要运行Euroc数据集，则在<code>euroc_config.yaml</code >中更改</p> 
+         <pre><code class="prism language-javascript"><span class="token literal-property property">output_path</span><span class="token operator">:</span> <span class="token string">"your_path/output"</span>
+</code ></pre> 
+         <p>Euroc数据集可前往官网下载，从官网给的<a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/" rel="nofollow">下载地址</a>中下载，下载其中的bag文件，比如V1_01_easy.bag。将其放在目录<code>~/dataset/</code >下，然后分别打开三个终端</p> 
+         <pre><code class="prism language-javascript">roslaunch vins_estimator euroc<span class="token punctuation">.</span>launch 
+roslaunch vins_estimator vins_rviz<span class="token punctuation">.</span>launch
+rosbag play <span class="token operator">~</span><span class="token operator">/</span>dataset<span class="token operator">/</span>V1_01_easy<span class="token punctuation">.</span>bag
+</code ></pre> 
+         <p>运行结果如下图，如果运行起来了那就表示VINS-Mono安装成功<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/81fb0469b4bed60c34586605bddb4ed9.png" alt="rviz"></p> 
+         <h2><a id="realsense_150"></a>二、安装realsense</h2> 
+         <h3><a id="1_151"></a>1.安装相机驱动</h3> 
+         <p>进入realsense官网的linux安装驱动<a href="https://github.com/IntelRealSense/librealsense/blob/development/doc/distribution_linux.md">链接</a>，首先注册公钥：</p> 
+         <pre><code class="prism language-javascript">sudo mkdir <span class="token operator">-</span>p <span class="token operator">/</span>etc<span class="token operator">/</span>apt<span class="token operator">/</span>keyrings
+curl <span class="token operator">-</span>sSf https<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>librealsense<span class="token punctuation">.</span>intel<span class="token punctuation">.</span>com<span class="token operator">/</span>Debian<span class="token operator">/</span>librealsense<span class="token punctuation">.</span>pgp <span class="token operator">|</span> sudo tee <span class="token operator">/</span>etc<span class="token operator">/</span>apt<span class="token operator">/</span>keyrings<span class="token operator">/</span>librealsense<span class="token punctuation">.</span>pgp <span class="token operator">&gt;</span> <span class="token operator">/</span>dev<span class="token operator">/</span><span class="token keyword">null</span>
+</code ></pre> 
+         <p>确认https支持是否已经下载：</p> 
+         <pre><code class="prism language-javascript">sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install apt<span class="token operator">-</span>transport<span class="token operator">-</span>https
+</code ></pre> 
+         <p>将服务器添加到存储库列表：</p> 
+         <pre><code class="prism language-javascript">echo <span class="token string">"deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main"</span> <span class="token operator">|</span> \
+sudo tee <span class="token operator">/</span>etc<span class="token operator">/</span>apt<span class="token operator">/</span>sources<span class="token punctuation">.</span>list<span class="token punctuation">.</span>d<span class="token operator">/</span>librealsense<span class="token punctuation">.</span>list
+sudo apt<span class="token operator">-</span><span class="token keyword">get</span> update
+</code ></pre> 
+         <p>安装库：</p> 
+         <pre><code class="prism language-javascript">sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install librealsense2<span class="token operator">-</span>dkms
+sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install librealsense2<span class="token operator">-</span>utils
+</code ></pre> 
+         <p>可选择安装developer和debug包</p> 
+         <pre><code class="prism language-javascript">sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install librealsense2<span class="token operator">-</span>dev
+sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install librealsense2<span class="token operator">-</span>dbg
+</code ></pre> 
+         <p>都安装完成后，插上相机，运行realsense，注意D435i需要连接USB3.0的口</p> 
+         <pre><code class="prism language-javascript">realsense<span class="token operator">-</span>viewer
+</code ></pre> 
+         <p>运行结果如下图，注意左上方是否是USB3.*，USB2传输速率不足会很卡。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/6815299d2aeec46004c48d137a429d59.png" alt="realsense软件图"></p> 
+         <h3><a id="2realsenseros_183"></a>2.安装realsense-ros</h3> 
+         <p>还是进realsense-ros的github官网，跟着官网的步骤来：<br> <a href="https://github.com/IntelRealSense/realsense-ros/tree/ros1-legacy">https://github.com/IntelRealSense/realsense-ros/tree/ros1-legacy</a><br> 根据步骤：首先创建工作空间</p> 
+         <pre><code class="prism language-javascript">mkdir <span class="token operator">-</span>p <span class="token operator">~</span><span class="token operator">/</span>realsense_ws<span class="token operator">/</span>src
+cd <span class="token operator">~</span><span class="token operator">/</span>realsense_ws<span class="token operator">/</span>src<span class="token operator">/</span>
+</code ></pre> 
+         <p>拷下realsense-ros的代码：</p> 
+         <pre><code class="prism language-javascript">git clone https<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>IntelRealSense<span class="token operator">/</span>realsense<span class="token operator">-</span>ros<span class="token punctuation">.</span>git
+cd realsense<span class="token operator">-</span>ros<span class="token operator">/</span>
+git checkout <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">git tag | sort -V | grep -P "^2.\d+\.\d+" | tail -1</span><span class="token template-punctuation string">`</span></span>
+cd <span class="token punctuation">.</span><span class="token punctuation">.</span>
+</code ></pre> 
+         <p>确认ddynamic_reconfigure是否已经安装：</p> 
+         <pre><code class="prism language-javascript">sudo apt<span class="token operator">-</span><span class="token keyword">get</span> install ros<span class="token operator">-</span>noetic<span class="token operator">-</span>ddynamic<span class="token operator">-</span>reconfigure
+</code ></pre> 
+         <p>编译文件：</p> 
+         <pre><code class="prism language-javascript">catkin_init_workspace
+cd <span class="token punctuation">.</span><span class="token punctuation">.</span>
+catkin_make clean
+catkin_make <span class="token operator">-</span><span class="token constant">DCATKIN_ENABLE_TESTING</span><span class="token operator">=</span>False <span class="token operator">-</span><span class="token constant">DCMAKE_BUILD_TYPE</span><span class="token operator">=</span>Release
+catkin_make install
+</code ></pre> 
+         <p>添加.bashrc</p> 
+         <pre><code class="prism language-javascript">echo <span class="token string">"source ~/realsense_ws/devel/setup.bash"</span> <span class="token operator">&gt;&gt;</span> <span class="token operator">~</span><span class="token operator">/</span><span class="token punctuation">.</span>bashrc
+source <span class="token operator">~</span><span class="token operator">/</span><span class="token punctuation">.</span>bashrc
+</code ></pre> 
+         <p>验证安装：<br> 启动相机节点：</p> 
+         <pre><code class="prism language-javascript">roslaunch realsense2_camera rs_camera<span class="token punctuation">.</span>launch
+</code ></pre> 
+         <p>查看话题列表，列表如下图所示：</p> 
+         <pre><code class="prism language-javascript">rostopic list
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/d11d3afdd59930e3b6eee89f667b09b1.png" alt="realsense话题列表"><br> 运行以下代码可查看rgb图和深度图：</p> 
+         <pre><code class="prism language-javascript">rosrun rqt_image_view rqt_image_view
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/c94cbe67cbcbec1edfdf7cf4e88212ea.png" alt="realsense rgb图和深度图"><br> 运行如下代码可以查看点云图：</p> 
+         <pre><code class="prism language-javascript">roslaunch realsense2_camera demo_pointcloud<span class="token punctuation">.</span>launch
+</code ></pre> 
+         <h2><a id="D435iVINSMono_234"></a>三、用D435i运行VINS-Mono</h2> 
+         <p>这里再贴一下参考：<br> <a href="https://blog.csdn.net/weixin_44580210/article/details/89789416">从零开始使用Realsense D435i运行VINS-Mono</a><br> <a href="https://blog.csdn.net/qq_41839222/article/details/86552367">如何用Realsense D435i运行VINS-Mono等VIO算法 获取IMU同步数据</a></p> 
+         <h3><a id="1realsensers_cameralaunch_238"></a>1.修改realsense包里的rs_camera.launch文件</h3> 
+         <p>第一处，修改unite_imu_method如下，这里是让IMU的角速度和加速度作为一个topic输出</p> 
+         <pre><code class="prism language-javascript"><span class="token operator">&lt;</span>arg name<span class="token operator">=</span><span class="token string">"unite_imu_method"</span>      <span class="token keyword">default</span><span class="token operator">=</span><span class="token string">"copy"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+</code ></pre> 
+         <p>第二处，修改enable_sync参数为true，这里是开机相机和IMU的同步</p> 
+         <pre><code class="prism language-javascript"><span class="token operator">&lt;</span>arg name<span class="token operator">=</span><span class="token string">"enable_sync"</span>           <span class="token keyword">default</span><span class="token operator">=</span><span class="token string">"true"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+</code ></pre> 
+         <p>然后是第三处，realsense默认图片流开启，但imu流却是关闭的，需要打开imu流：不然就会出现错误：执行roslaunch vins_estimator realsense_color.launch指令时提示：no previous pose graph，且打开rviz时无轨迹，fixed frame报错unknown frame world，这个上述博主都没讲到，不知是否是版本原因。</p> 
+         <pre><code class="prism language-javascript"><span class="token operator">&lt;</span>arg name<span class="token operator">=</span><span class="token string">"enable_gyro"</span>         <span class="token keyword">default</span><span class="token operator">=</span><span class="token string">"true"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span>arg name<span class="token operator">=</span><span class="token string">"enable_accel"</span>        <span class="token keyword">default</span><span class="token operator">=</span><span class="token string">"true"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+</code ></pre> 
+         <h3><a id="2VINSMonorealsense_color_configyaml_252"></a>2.修改VINS-Mono包里的realsense_color_config.yaml文件</h3> 
+         <p>第一处，修改订阅的topic</p> 
+         <pre><code class="prism language-javascript"><span class="token literal-property property">imu_topic</span><span class="token operator">:</span> <span class="token string">"/camera/imu"</span>
+<span class="token literal-property property">image_topic</span><span class="token operator">:</span> <span class="token string">"/camera/color/image_raw"</span>
+</code ></pre> 
+         <p>第二处，修改相机内参，这里先再次打开运行realsesne</p> 
+         <pre><code class="prism language-javascript">roslaunch realsense2_camera rs_camera<span class="token punctuation">.</span>launch
+</code ></pre> 
+         <p>然后可以通过如下命令获取相机内参</p> 
+         <pre><code class="prism language-javascript">rostopic echo <span class="token operator">/</span>camera<span class="token operator">/</span>color<span class="token operator">/</span>camera_info
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/75347a3aa70a1d409d525fddbb3663df.png" alt="请添加图片描述"><br> 图片的宽和高分别填入：</p> 
+         <pre><code class="prism language-javascript"><span class="token literal-property property">image_width</span><span class="token operator">:</span> <span class="token number">1280</span>
+<span class="token literal-property property">image_height</span><span class="token operator">:</span> <span class="token number">720</span>
+</code ></pre> 
+         <p>K里面第1个是fx，第3个是cx，第5个是fy，第6个是cy，照读出来的对应填写即可。</p> 
+         <pre><code class="prism language-javascript"><span class="token literal-property property">projection_parameters</span><span class="token operator">:</span>
+   <span class="token literal-property property">fx</span><span class="token operator">:</span> <span class="token number">910.2757568359375</span>
+   <span class="token literal-property property">fy</span><span class="token operator">:</span> <span class="token number">909.9263305664062</span>
+   <span class="token literal-property property">cx</span><span class="token operator">:</span> <span class="token number">652.0943603515625</span>
+   <span class="token literal-property property">cy</span><span class="token operator">:</span> <span class="token number">379.8188781738281</span>
+</code ></pre> 
+         <p>第三处，IMU到相机的变换矩阵，这里因为没有去搞外参，所以选2自动修正</p> 
+         <pre><code class="prism language-javascript"># Extrinsic parameter between <span class="token constant">IMU</span> and Camera<span class="token punctuation">.</span>
+<span class="token literal-property property">estimate_extrinsic</span><span class="token operator">:</span> <span class="token number">2</span>   # <span class="token number">0</span>  Have an accurate extrinsic parameters<span class="token punctuation">.</span> We will trust the following imu<span class="token operator">^</span>R_cam<span class="token punctuation">,</span> imu<span class="token operator">^</span>T_cam<span class="token punctuation">,</span> don't change it<span class="token punctuation">.</span>
+                        # <span class="token number">1</span>  Have an initial guess about extrinsic parameters<span class="token punctuation">.</span> We will optimize around your initial guess<span class="token punctuation">.</span>
+                        # <span class="token number">2</span>  Don<span class="token string">'t know anything about extrinsic parameters. You don'</span>t need to give <span class="token constant">R</span><span class="token punctuation">,</span><span class="token constant">T</span><span class="token punctuation">.</span> We will <span class="token keyword">try</span> to calibrate it<span class="token punctuation">.</span> Do some rotation movement at beginning<span class="token punctuation">.</span>                        
+#If you choose <span class="token number">0</span> or <span class="token number">1</span><span class="token punctuation">,</span> you should write down the following matrix<span class="token punctuation">.</span>
+</code ></pre> 
+         <p>第四处，IMU参数，这里全部修改注释给的参数</p> 
+         <pre><code class="prism language-javascript">#imu parameters       The more accurate parameters you provide<span class="token punctuation">,</span> the better performance
+<span class="token literal-property property">acc_n</span><span class="token operator">:</span> <span class="token number">0.2</span>          # accelerometer measurement noise standard deviation<span class="token punctuation">.</span> #<span class="token number">0.2</span>
+<span class="token literal-property property">gyr_n</span><span class="token operator">:</span> <span class="token number">0.05</span>         # gyroscope measurement noise standard deviation<span class="token punctuation">.</span>     #<span class="token number">0.05</span>
+<span class="token literal-property property">acc_w</span><span class="token operator">:</span> <span class="token number">0.02</span>         # accelerometer bias random work noise standard deviation<span class="token punctuation">.</span>  #<span class="token number">0.02</span>
+<span class="token literal-property property">gyr_w</span><span class="token operator">:</span> <span class="token number">4.0e-5</span>       # gyroscope bias random work noise standard deviation<span class="token punctuation">.</span>     #<span class="token number">4.0e-5</span>
+<span class="token literal-property property">g_norm</span><span class="token operator">:</span> <span class="token number">9.805</span>       # gravity magnitude
+</code ></pre> 
+         <p>第五处，是否需要在线估计同步时差，因为realsense D435i已经做好了硬件同步，这里选择不需要</p> 
+         <pre><code class="prism language-javascript">#unsynchronization parameters
+<span class="token literal-property property">estimate_td</span><span class="token operator">:</span> <span class="token number">0</span>                      # online estimate time offset between camera and imu
+<span class="token literal-property property">td</span><span class="token operator">:</span> <span class="token number">0.000</span>                           # initial value <span class="token keyword">of</span> time offset<span class="token punctuation">.</span> unit<span class="token operator">:</span> s<span class="token punctuation">.</span> readed image clock <span class="token operator">+</span> td <span class="token operator">=</span> real image <span class="token function">clock</span> <span class="token punctuation">(</span><span class="token constant">IMU</span> clock<span class="token punctuation">)</span>
+</code ></pre> 
+         <p>第六处，相机曝光改成全局曝光</p> 
+         <pre><code class="prism language-javascript">#rolling shutter parameters
+<span class="token literal-property property">rolling_shutter</span><span class="token operator">:</span> <span class="token number">0</span>                      # <span class="token number">0</span><span class="token operator">:</span> global shutter camera<span class="token punctuation">,</span> <span class="token number">1</span><span class="token operator">:</span> rolling shutter camera
+<span class="token literal-property property">rolling_shutter_tr</span><span class="token operator">:</span> <span class="token number">0.033</span>               # unit<span class="token operator">:</span> s<span class="token punctuation">.</span> rolling shutter read out time per <span class="token function">frame</span> <span class="token punctuation">(</span>from data sheet<span class="token punctuation">)</span><span class="token punctuation">.</span> 
+</code ></pre> 
+         <p>第七处，搜索output，把两个output_path改为自己的路径</p> 
+         <pre><code class="prism language-javascript"><span class="token literal-property property">output_path</span><span class="token operator">:</span> <span class="token string">"/home/zz/output/"</span>
+<span class="token literal-property property">pose_graph_save_path</span><span class="token operator">:</span> <span class="token string">"/home/zz/output/pose_graph/"</span>
+</code ></pre> 
+         <h3><a id="3VINSMono_314"></a>3.打开相机，运行VINS-Mono</h3> 
+         <p>首先对realsense_ws和vinsmono_ws进行重新编译</p> 
+         <pre><code class="prism language-javascript">cd <span class="token operator">~</span><span class="token operator">/</span>realsense_ws
+catkin_make
+cd <span class="token operator">~</span><span class="token operator">/</span>vinsmono_ws
+catkin_make
+</code ></pre> 
+         <p>打开相机，运行VINS-Mono，分别打开三个终端输入如下代码</p> 
+         <pre><code class="prism language-javascript">roslaunch realsense2_camera rs_camera<span class="token punctuation">.</span>launch 
+roslaunch vins_estimator realsense_color<span class="token punctuation">.</span>launch 
+roslaunch vins_estimator vins_rviz<span class="token punctuation">.</span>launch
+</code ></pre> 
+         <p>拿着D435i在房间内走了一下，结果如下图所示<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/4e6be3d5a6b9df6c9592c8650604eae9.png" alt="VINS-Mono运行的rviz界面"><br> 这样整个过程就走通了，最后如果rviz的Global Status一开始显示错误的话，就把相机拿起来动一动就可以了。<br> 整个过程有些是必须从国外的源下载的，碰到有下载缓慢的情况，就把梯子开全局，速度就会上去。</p> 
+        </div> 
+        <link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/markdown_views-375c595788.css" rel="stylesheet"> 
+        <link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/style-e504d6a974.css" rel="stylesheet"> 
+       </div> 
+      </article>   
+      <img src="https://img-home.csdnimg.cn/images/20211209110851.png" alt="pdf_watermark" width="0" height="0" style="display: none"> 
+      <div class="print_watermark"></div> 
+      <div class="print_watermark_info"> 
+       <p>内容来源：csdn.net</p> 
+       <p>作者昵称：xlbwzz</p> 
+       <p>原文链接：https://blog.csdn.net/xlbwzz/article/details/130079248</p> 
+       <p>作者主页：https://blog.csdn.net/xlbwzz</p> 
+      </div> 
+      <style>
+    .print_watermark, .print_watermark_info {
+      display: none
+    }
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact; /* Chrome, Safari */
+        color-adjust: exact; /* Firefox */
+        background-image: none !important;
+      }
+      * {
+        -webkit-print-color-adjust: exact;
+      }
+      .blog-content-box {
+        padding: 0;
+      }
+      .blog-content-box .article-header .article-info-box > div:not(.article-bar-top){
+        display: none !important;
+      }
+      .blog-content-box .article-header .article-info-box  .article-bar-top img{
+          display:none
+      }
+      .blog-content-box .article-header .article-info-box > .article-bar-top .bar-content > *:not(.follow-nickName):not(.time){
+          display: none !important;
+      }
+      .print_watermark {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 999;
+        background-image: url('https://img-home.csdnimg.cn/images/20211209110851.png');
+        background-size: 180px auto;
+        background-repeat: repeat;
+      }
+      .print_watermark_info {
+        display: block;
+        position: fixed;
+        bottom: 16px;
+        right: 0;
+        z-index: 1000;
+        color: #e8e8ed;
+        font-size: 12px;
+        ocapity: .5
+      }
+      @page {
+        margin: 0 10mm 10mm;
+        size: landscape;
+      }
+      body, article {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #csdn-toolbar,.main_father > *:not(#mainBox), .csdn-side-toolbar, .main_father aside {
+        display: none !important;
+      }
+      .main_father > #mainBox {
+        width: unset
+      }
+      .main_father > #mainBox > main > *:not(.blog-content-box){
+        display: none !important;
+      }
+    }
+  </style> 
+     </div>       
+     <div id="pcCommentBox" class="comment-box comment-box-new2 login-comment-box-new" style="display:none"> 
+      <div class="has-comment" style="display:block"> 
+       <div class="one-line-box"> 
+        <div class="has-comment-tit go-side-comment"> 
+         <span class="count">6</span>&nbsp;条评论 
+        </div> 
+        <div class="has-comment-con comment-operate-item"></div> 
+        <a class="has-comment-bt-right go-side-comment focus">写评论</a> 
+       </div> 
+      </div> 
+     </div>     
+     <div class="blog-footer-bottom" style="margin-top:10px;"></div>   
+    </main> 
+    <aside class="blog_container_aside "> 
+     <div id="asideProfile" class="aside-box active"> 
+      <div class="profile-intro d-flex"> 
+       <div class="avatar-box d-flex justify-content-center flex-column"> 
+        <a href="https://blog.csdn.net/xlbwzz" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_379&quot;,&quot;spm&quot;:&quot;3001.4121&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img src="https://profile-avatar.csdnimg.cn/default.jpg!1" class="avatar_pic"> </a> 
+       </div> 
+       <div class="user-info d-flex flex-column profile-intro-name-box"> 
+        <div class="profile-intro-name-boxTop"> 
+         <a href="https://blog.csdn.net/xlbwzz" target="_blank" class="" id="uid" title="xlbwzz" data-report-click="{&quot;mod&quot;:&quot;popu_379&quot;,&quot;spm&quot;:&quot;3001.4122&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz&quot;,&quot;ab&quot;:&quot;new&quot;}"> <span class="name" username="xlbwzz">xlbwzz</span> </a> 
+        </div> 
+        <div class="profile-intro-name-boxFooter-new"> 
+         <p class="profile-intro-name-leve"> <span> 博客等级 </span> <img class="level" src="https://csdnimg.cn/identity/blog1.png"> </p> 
+         <span class="profile-intro-name-years" title="已加入 CSDN 6年">码龄6年</span> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="profile-intro-rank-information"> 
+       <dl> 
+        <a href="https://blog.csdn.net/xlbwzz" data-report-click="{&quot;mod&quot;:&quot;1598321000_001&quot;,&quot;spm&quot;:&quot;3001.4310&quot;}" data-report-query="t=1"> 
+         <dd>
+          <span>3</span>
+         </dd> 
+         <dt>
+          原创
+         </dt> </a> 
+       </dl> 
+       <dl title="24"> 
+        <dd>
+         24
+        </dd> 
+        <dt>
+         点赞
+        </dt> 
+       </dl> 
+       <dl title="169"> 
+        <dd>
+         169
+        </dd> 
+        <dt>
+         收藏
+        </dt> 
+       </dl> 
+       <dl id="fanBox" title="5"> 
+        <dd>
+         <span id="fan">5</span>
+        </dd> 
+        <dt>
+         粉丝
+        </dt> 
+       </dl> 
+      </div> 
+      <div class="profile-intro-name-boxOpration"> 
+       <div class="opt-letter-watch-box"> 
+        <a class="personal-watch bt-button" id="btnAttent">已关注</a> 
+       </div> 
+       <div class="opt-letter-watch-box"> 
+        <a rel="noopener" class="bt-button personal-letter" href="https://im.csdn.net/chat/xlbwzz" target="_blank">私信</a> 
+       </div> 
+      </div> 
+     </div> 
+     <div class="swiper-remuneration-container" id="swiper-remuneration-container"> 
+      <div class="swiper-wrapper"> 
+       <!-- 这里可以添加多个Swiper幻灯片 --> 
+       <div class="swiper-slide"> 
+        <a data-report-click="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;0&quot;}}" data-report-swiper="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;0&quot;}}" href="https://activity.csdn.net/writing?id=11002" target="_blank"> <img src="https://i-operation.csdnimg.cn/images/7507485b3f07424682705675dd2505d5.png" alt=""> </a> 
+       </div> 
+       <div class="swiper-slide"> 
+        <a data-report-click="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;1&quot;}}" data-report-swiper="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;1&quot;}}" href="https://mall.csdn.net/vip?utm_source=251024_vip_blogleftbanner" target="_blank"> <img src="https://i-operation.csdnimg.cn/images/244d7aa2c02e48218bc313200b7a5e00.png" alt=""> </a> 
+       </div> 
+       <div class="swiper-slide"> 
+        <a data-report-click="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;2&quot;}}" data-report-swiper="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;2&quot;}}" href="https://mp.csdn.net/edit?utm_source=blog" target="_blank"> <img src="https://i-operation.csdnimg.cn/images/bfc20af708654cc689adbb6361f6dc98.png" alt=""> </a> 
+       </div> 
+      </div> 
+      <div class="swiper-remuneration-pagination"></div> 
+      <!-- 如果需要导航按钮 --> 
+      <div class="swiper-remuneration-button-prev"></div> 
+      <div class="swiper-remuneration-button-next"></div> 
+     </div> 
+     <div id="asideHotArticle" class="aside-box"> 
+      <h3 class="aside-title">热门文章</h3> 
+      <div class="aside-content"> 
+       <ul class="hotArticle-list"> 
+        <li> <a href="https://blog.csdn.net/xlbwzz/article/details/130286279" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130286279&quot;,&quot;ab&quot;:&quot;new&quot;}"> Ubuntu20.04用D435i运行VINS-Fusion <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">5033</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/xlbwzz/article/details/130079248" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130079248&quot;,&quot;ab&quot;:&quot;new&quot;}"> Ubuntu20.04用D435i运行VINS-Mono <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">3158</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/xlbwzz/article/details/130203136" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130203136&quot;,&quot;ab&quot;:&quot;new&quot;}"> ubuntu20.04双系统 更新软件源 和 修改时间 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">598</span> </a> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div class="article-previous" id="article-previous"> 
+      <dl class="next" data-report-click="{&quot;spm&quot;:&quot;3001.10796&quot;,&quot;extend1&quot;:&quot;下一篇&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10796&quot;,&quot;extend1&quot;:&quot;下一篇&quot;}"> 
+       <dt>
+         下一篇： 
+       </dt> 
+       <dd> 
+        <a href="https://blog.csdn.net/xlbwzz/article/details/130203136" data-report-query="spm=3001.10796"> ubuntu20.04双系统 更新软件源 和 修改时间 </a> 
+       </dd> 
+      </dl> 
+     </div> 
+     <div id="asideNewComments" class="aside-box"> 
+      <h3 class="aside-title">最新评论</h3> 
+      <div class="aside-content"> 
+       <ul class="newcomment-list"> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/xlbwzz/article/details/130286279#comments_38030126" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130286279#comments_38030126&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130286279#comments_38030126&quot;,&quot;ab&quot;:&quot;new&quot;}">Ubuntu20.04用D435i运行VINS-Fusion</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/qq_55486400" class="user-name" target="_blank">炸酱面配窝窝头: </a> <span class="code-comments">哥，我想问一下，我这个搞完了。无人机怎么飞起来呢，用px4和他通讯，px4接受数据就可以了吗</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/xlbwzz/article/details/130079248#comments_27540905" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130079248#comments_27540905&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130079248#comments_27540905&quot;,&quot;ab&quot;:&quot;new&quot;}">Ubuntu20.04用D435i运行VINS-Mono</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/qq_51506668" class="user-name" target="_blank">qq_51506668: </a> <span class="code-comments">博主，请问vins在跑bag文件时，能输出rgb图片和相应位姿吗？</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/xlbwzz/article/details/130079248#comments_26601461" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130079248#comments_26601461&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130079248#comments_26601461&quot;,&quot;ab&quot;:&quot;new&quot;}">Ubuntu20.04用D435i运行VINS-Mono</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/weixin_44093248" class="user-name" target="_blank">weixin_44093248: </a> <span class="code-comments">博主你好，请问你运行的时候会不会出现漂移，我照你的流程走的，漂移的很厉害</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/xlbwzz/article/details/130079248#comments_26595496" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130079248#comments_26595496&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130079248#comments_26595496&quot;,&quot;ab&quot;:&quot;new&quot;}">Ubuntu20.04用D435i运行VINS-Mono</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/community_717" class="user-name" target="_blank">CSDN-Ada助手: </a> <span class="code-comments">Python入门 技能树或许可以帮到你：https://edu.csdn.net/skill/python?utm_source=AI_act_python</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/xlbwzz/article/details/130286279#comments_26343294" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130286279#comments_26343294&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130286279#comments_26343294&quot;,&quot;ab&quot;:&quot;new&quot;}">Ubuntu20.04用D435i运行VINS-Fusion</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/community_717" class="user-name" target="_blank">CSDN-Ada助手: </a> <span class="code-comments">恭喜您撰写了这篇关于Ubuntu20.04用D435i运行VINS-Fusion的博客！这篇文章非常有价值，对于那些想要在Ubuntu20.04上使用D435i运行VINS-Fusion的人来说，这篇博客无疑是一份宝贵的指南。我希望您能继续这样的创作，并分享更多有关机器视觉和深度学习的知识。我建议您可以尝试撰写一些深度学习框架的实现或者机器学习算法的优化等方面的内容，这些都是非常有价值的。再次感谢您的分享，期待您的下一篇博客！ CSDN 正在通过评论红包奖励优秀博客，请看红包流：https://bbs.csdn.net/?type=4&amp;header=0&amp;utm_source=csdn_ai_ada_blog_reply3，我们会奖励持续创作和学习的博主，请看：https://bbs.csdn.net/forums/csdnnews?typeId=116148&amp;utm_source=csdn_ai_ada_blog_reply3</span> </p> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div id="asideHotArticle" class="aside-box"> 
+      <h3 class="aside-title">大家在看</h3> 
+      <div class="aside-content"> 
+       <ul class="hotArticle-list"> 
+        <li> <a href="https://blog.csdn.net/usbdev_ru/article/details/153685549" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/usbdev_ru/article/details/153685549&quot;,&quot;strategy&quot;:&quot;202_1052723-3457354_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/usbdev_ru/article/details/153685549&quot;,&quot;strategy&quot;:&quot;202_1052723-3457354_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> System.Data.PocketPC.asmmeta.dll SYSFMON.DLL SynTPCo2.dll synth.dll syncli.exe SYMUIAX.OCX Sym <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">77</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/ANSILIC/article/details/153418931" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/ANSILIC/article/details/153418931&quot;,&quot;strategy&quot;:&quot;202_1052723-3457351_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/ANSILIC/article/details/153418931&quot;,&quot;strategy&quot;:&quot;202_1052723-3457351_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> ASP4644S2B抗辐照性能的地面试验与在轨验证 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">1004</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/usbdev_ru/article/details/153685282" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/usbdev_ru/article/details/153685282&quot;,&quot;strategy&quot;:&quot;202_1052723-3457353_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/usbdev_ru/article/details/153685282&quot;,&quot;strategy&quot;:&quot;202_1052723-3457353_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> mod_python.dll modem592.exe Modbus_TCP.dll MobileErrors.dll mobase.dll mnyfilt.dll mnmdd64.dll <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">321</span> </a> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div id="asideArchive" class="aside-box" style=" width:300px;"> 
+      <h3 class="aside-title">最新文章</h3> 
+      <div class="aside-content"> 
+       <ul class="inf_list clearfix"> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/xlbwzz/article/details/130286279" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130286279&quot;,&quot;ab&quot;:&quot;left&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130286279&quot;,&quot;ab&quot;:&quot;left&quot;}">Ubuntu20.04用D435i运行VINS-Fusion</a> </li> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/xlbwzz/article/details/130203136" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130203136&quot;,&quot;ab&quot;:&quot;left&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130203136&quot;,&quot;ab&quot;:&quot;left&quot;}">ubuntu20.04双系统 更新软件源 和 修改时间</a> </li> 
+       </ul> 
+       <div class="archive-bar"></div> 
+       <div class="archive-box"> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/xlbwzz?type=blog&amp;year=2023&amp;month=05" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz?type=blog&amp;year=2023&amp;month=05&quot;}"><span class="year">2023年</span><span class="num">3篇</span></a>
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <!-- 详情页显示目录 --> 
+     <!--文章目录--> 
+     <div id="asidedirectory" class="aside-box"> 
+      <div class="groupfile groupfile-active" id="directory"> 
+       <h3 class="aside-title">目录</h3> 
+       <div class="align-items-stretch group_item" id="align-items-stretch"> 
+        <div class="pos-box"> 
+         <div class="scroll-box"> 
+          <div class="toc-box"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <p class="flexible-btn-new active" id="flexible-btn-groupfile" data-report-click="{&quot;spm&quot;:&quot;3001.10780&quot;,&quot;strategy&quot;:&quot;展开全部&quot;}" data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch"><span class="text">展开全部</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-bot-White.png" alt=""></p> 
+       <p class="flexible-btn-new-close active" data-report-click="{&quot;spm&quot;:&quot;3001.10780&quot;,&quot;strategy&quot;:&quot;收起&quot;}" data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch"><span class="text">收起</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-top-White.png" alt=""></p> 
+      </div> 
+     </div> 
+    </aside>    
+   </div> 
+   <div class="recommend-right align-items-stretch clearfix" id="rightAside" data-type="recommend"> 
+    <aside class="recommend-right_aside"> 
+     <div class="rightside-fixed-hide"> 
+     </div> 
+     <div id="recommend-right"> 
+      <div class="flex-column aside-box groupfile groupfile-active " id="groupfile"> 
+       <div class="groupfile-div"> 
+        <h3 class="aside-title">目录</h3> 
+        <div class="align-items-stretch group_item" id="align-items-stretch-right"> 
+         <div class="pos-box"> 
+          <div class="scroll-box"> 
+           <div class="toc-box"></div> 
+          </div> 
+         </div> 
+        </div> 
+        <p class="flexible-btn-new" id="flexible-btn-groupfile" data-report-click="{&quot;spm&quot;:&quot;3001.10782&quot;,&quot;strategy&quot;:&quot;展开全部&quot;}" data-traigger="true" data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch-right"><span class="text">展开全部</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-bot-White.png" alt=""></p> 
+        <p class="flexible-btn-new-close close" data-report-click="{&quot;spm&quot;:&quot;3001.10782&quot;,&quot;strategy&quot;:&quot;收起&quot;}" data-traigger="true" data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch-right"><span class="text">收起</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-top-White.png" alt=""></p> 
+       </div> 
+      </div> 
+      <div class="article-previous" id="article"> 
+       <dl class="next" data-report-click="{&quot;spm&quot;:&quot;3001.10796&quot;,&quot;extend1&quot;:&quot;下一篇&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10796&quot;,&quot;extend1&quot;:&quot;下一篇&quot;}"> 
+        <dt>
+          下一篇： 
+        </dt> 
+        <dd> 
+         <a href="https://blog.csdn.net/xlbwzz/article/details/130203136" data-report-query="spm=3001.10796"> ubuntu20.04双系统 更新软件源 和 修改时间 </a> 
+        </dd> 
+       </dl> 
+      </div> 
+      <div id="asideArchive" class="aside-box" style=" width:300px;"> 
+       <h3 class="aside-title">最新文章</h3> 
+       <div class="aside-content"> 
+        <ul class="inf_list clearfix"> 
+         <li class="clearfix"> <a href="https://blog.csdn.net/xlbwzz/article/details/130286279" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130286279&quot;,&quot;ab&quot;:&quot;right&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130286279&quot;,&quot;ab&quot;:&quot;right&quot;}">Ubuntu20.04用D435i运行VINS-Fusion</a> </li> 
+         <li class="clearfix"> <a href="https://blog.csdn.net/xlbwzz/article/details/130203136" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130203136&quot;,&quot;ab&quot;:&quot;right&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz/article/details/130203136&quot;,&quot;ab&quot;:&quot;right&quot;}">ubuntu20.04双系统 更新软件源 和 修改时间</a> </li> 
+        </ul> 
+        <div class="archive-bar"></div> 
+        <div class="archive-box"> 
+         <div class="archive-list-item">
+          <a href="https://blog.csdn.net/xlbwzz?type=blog&amp;year=2023&amp;month=05" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/xlbwzz?type=blog&amp;year=2023&amp;month=05&quot;}"><span class="year">2023年</span><span class="num">3篇</span></a>
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside> 
+   </div> 
+   <div class="recommend-right1  align-items-stretch clearfix" id="rightAsideConcision" data-type="recommend"> 
+    <aside class="recommend-right_aside"> 
+     <div id="recommend-right-concision"> 
+      <div class="flex-column aside-box groupfile" id="groupfileConcision"> 
+       <div class="groupfile-div1"> 
+        <h3 class="aside-title">目录</h3> 
+        <div class="align-items-stretch group_item"> 
+         <div class="pos-box"> 
+          <div class="scroll-box"> 
+           <div class="toc-box"></div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside> 
+   </div> 
+  </div> 
+  <div class="mask-dark"></div> 
+  <div class="skin-boxshadow"></div> 
+  <div class="directory-boxshadow"></div> 
+  <div class="comment-side-box-shadow comment-side-tit-close" id="commentSideBoxshadow"> 
+   <div class="comment-side-content"> 
+    <div class="comment-side-tit"> 
+     <div class="comment-side-tit-count">
+      评论&nbsp;
+      <span class="count">6</span>
+     </div> 
+     <img class="comment-side-tit-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/closeBt.png">
+    </div> 
+    <div id="pcCommentSideBox" class="comment-box comment-box-new2 " style="display:block"> 
+     <div class="comment-edit-box d-flex"> 
+      <div class="user-img"> 
+       <a href="https://blog.csdn.net/2501_93896013" target="_blank"> <img src="https://profile-avatar.csdnimg.cn/default.jpg!1"> </a> 
+      </div> 
+      <form id="commentform"> 
+       <textarea class="comment-content" name="comment_content" id="comment_content" placeholder="欢迎高质量的评论，低质的评论会被折叠" maxlength="1000"></textarea> 
+       <div class="comment-reward-box" style="background-image: url('https://img-home.csdnimg.cn/images/20230131025301.png');"> 
+        <a class="btn-remove-reward"></a> 
+        <div class="form-reward-box"> 
+         <div class="info">
+           成就一亿技术人! 
+         </div> 
+         <div class="price-info">
+           拼手气红包
+          <span class="price">6.0元</span> 
+         </div> 
+        </div> 
+       </div> 
+       <div class="comment-operate-box"> 
+        <div class="comment-operate-l"> 
+         <span id="tip_comment" class="tip">还能输入<em>1000</em>个字符</span> 
+        </div> 
+        <div class="comment-operate-c">
+          &nbsp; 
+        </div> 
+        <div class="comment-operate-r"> 
+         <div class="comment-operate-item comment-reward"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentReward.png" alt="红包"> 
+          <span class="comment-operate-tip">添加红包</span> 
+         </div> 
+         <div class="comment-operate-item comment-emoticon"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentEmotionIcon.png" alt="表情包"> 
+          <span class="comment-operate-tip">插入表情</span> 
+          <div class="comment-emoticon-box comment-operate-isshow"> 
+           <div class="comment-emoticon-img-box"></div> 
+          </div> 
+         </div> 
+         <div class="comment-operate-item comment-code"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentCodeIcon.png" alt="表情包"> 
+          <span class="comment-operate-tip">代码片</span> 
+          <div class="comment-code-box comment-operate-isshow"> 
+           <ul id="commentCode"> 
+            <li><a data-code="html">HTML/XML</a></li> 
+            <li><a data-code="objc">objective-c</a></li> 
+            <li><a data-code="ruby">Ruby</a></li> 
+            <li><a data-code="php">PHP</a></li> 
+            <li><a data-code="csharp">C</a></li> 
+            <li><a data-code="cpp">C++</a></li> 
+            <li><a data-code="javascript">JavaScript</a></li> 
+            <li><a data-code="python">Python</a></li> 
+            <li><a data-code="java">Java</a></li> 
+            <li><a data-code="css">CSS</a></li> 
+            <li><a data-code="sql">SQL</a></li> 
+            <li><a data-code="plain">其它</a></li> 
+           </ul> 
+          </div> 
+         </div> 
+         <div class="comment-operate-item"> 
+          <input type="hidden" id="comment_replyId" name="comment_replyId"> 
+          <input type="hidden" id="article_id" name="article_id" value="130079248"> 
+          <input type="hidden" id="comment_userId" name="comment_userId" value=""> 
+          <input type="hidden" id="commentId" name="commentId" value=""> 
+          <a data-report-click="{&quot;mod&quot;:&quot;1582594662_003&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4227&quot;,&quot;ab&quot;:&quot;new&quot;}"> <input type="submit" class="btn-comment btn-comment-input" value="评论"> </a> 
+         </div> 
+        </div> 
+       </div> 
+      </form> 
+     </div> 
+     <div class="comment-list-container"> 
+      <div class="comment-list-box comment-operate-item"> 
+      </div> 
+      <div id="lookGoodComment" class="look-good-comment side-look-comment"> 
+       <a class="look-more-comment">查看更多评论<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowDownWhite.png" alt=""></a> 
+      </div> 
+      <div id="lookFlodComment" class="look-flod-comment"> 
+       <span class="count"></span>&nbsp;条评论被折叠&nbsp;
+       <a class="look-more-flodcomment">查看</a> 
+      </div> 
+      <div class="opt-box text-center"> 
+       <div class="btn btn-sm btn-link-blue" id="btnMoreComment"></div> 
+      </div> 
+     </div> 
+    </div> 
+    <div id="pcFlodCommentSideBox" class="pc-flodcomment-sidebox"> 
+     <div class="comment-fold-tit">
+      <span id="lookUnFlodComment" class="back"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowLeftWhite.png" alt=""></span>被折叠的&nbsp;
+      <span class="count"></span>&nbsp;条评论 
+      <a href="https://blogdev.blog.csdn.net/article/details/122245662" class="tip" target="_blank">为什么被折叠?</a> 
+      <a href="https://bbs.csdn.net/forums/FreeZone" class="park" target="_blank"> <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/iconPark.png">到【灌水乐园】发言</a> 
+     </div> 
+     <div class="comment-fold-content"></div> 
+     <div id="lookBadComment" class="look-bad-comment side-look-comment"> 
+      <a class="look-more-comment">查看更多评论<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowDownWhite.png" alt=""></a> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="comment-rewarddialog-box"> 
+    <div class="form-box"> 
+     <div class="title-box">
+       添加红包 
+      <a class="btn-form-close"></a> 
+     </div> 
+     <form id="commentRewardForm"> 
+      <div class="ipt-box"> 
+       <label for="txtName">祝福语</label> 
+       <div class="ipt-btn-box"> 
+        <input type="text" name="name" id="txtName" autocomplete="off" maxlength="50"> 
+        <a class="btn-ipt btn-random"></a> 
+       </div> 
+       <p class="notice">请填写红包祝福语或标题</p> 
+      </div> 
+      <div class="ipt-box"> 
+       <label for="txtSendAmount">红包数量</label> 
+       <div class="ipt-txt-box"> 
+        <input type="text" name="sendAmount" maxlength="4" id="txtSendAmount" placeholder="请填写红包数量(最小10个)" autocomplete="off"> 
+        <span class="after-txt">个</span> 
+       </div> 
+       <p class="notice">红包个数最小为10个</p> 
+      </div> 
+      <div class="ipt-box"> 
+       <label for="txtMoney">红包总金额</label> 
+       <div class="ipt-txt-box error"> 
+        <input type="text" name="money" maxlength="5" id="txtMoney" placeholder="请填写总金额(最低5元)" autocomplete="off"> 
+        <span class="after-txt">元</span> 
+       </div> 
+       <p class="notice">红包金额最低5元</p> 
+      </div> 
+      <div class="balance-info-box"> 
+       <label>余额支付</label> 
+       <div class="balance-info">
+         当前余额
+        <span class="balance">3.43</span>元 
+        <a href="https://i.csdn.net/#/wallet/balance/recharge" class="link-charge" target="_blank">前往充值 &gt;</a> 
+       </div> 
+      </div> 
+      <div class="opt-box"> 
+       <div class="pay-info">
+         需支付：
+        <span class="price">10.00</span>元 
+       </div> 
+       <button type="button" class="ml-auto btn-cancel">取消</button> 
+       <button type="button" class="ml8 btn-submit" disabled="true">确定</button> 
+      </div> 
+     </form> 
+    </div> 
+   </div> 
+   <div class="rr-guide-box"> 
+    <div class="rr-first-box"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward02.png" alt=""> 
+     <button class="btn-guide-known next">下一步</button> 
+    </div> 
+    <div class="rr-second-box"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward03.png" alt=""> 
+     <button class="btn-guide-known known">知道了</button> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="redEnvolope" id="redEnvolope"> 
+   <div class="env-box"> 
+    <div class="env-container"> 
+     <div class="pre-open" id="preOpen"> 
+      <div class="top"> 
+       <header> 
+        <img class="clearTpaErr" :src="redpacketAuthor.avatar" alt=""> 
+        <div class="author">
+         成就一亿技术人!
+        </div> 
+       </header> 
+       <div class="bot-icon"></div> 
+      </div> 
+      <footer> 
+       <div class="red-openbtn open-start"></div> 
+       <div class="tip">
+         领取后你会自动成为博主和红包主的粉丝 
+        <a class="rule" target="_blank">规则</a> 
+       </div> 
+      </footer> 
+     </div> 
+     <div class="opened" id="opened"> 
+      <div class="bot-icon"> 
+       <header> 
+        <a class="creatorUrl" href="" target="_blank"> <img class="clearTpaErr" src="https://profile-avatar.csdnimg.cn/default.jpg!2" alt=""> </a> 
+        <div class="author"> 
+         <div class="tt">
+          hope_wisdom
+         </div> 发出的红包 
+        </div> 
+       </header> 
+      </div> 
+      <div class="receive-box"> 
+       <header></header> 
+       <div class="receive-list"> 
+       </div> 
+      </div> 
+     </div> 
+    </div> 
+    <div class="close-btn"></div> 
+   </div> 
+  </div> 
+  <div class="pay-code"> 
+   <div class="pay-money">
+    实付
+    <span class="pay-money-span" data-nowprice="" data-oldprice="">元</span>
+   </div> 
+   <div class="content-blance">
+    <a class="blance-bt" href="javascript:;">使用余额支付</a>
+   </div> 
+   <div class="content-code"> 
+    <div id="payCode" data-id=""> 
+     <div class="renovate"> 
+      <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-time-out.png"> 
+      <span>点击重新获取</span> 
+     </div> 
+    </div> 
+    <div class="pay-style">
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/weixin.png"></span>
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/zhifubao.png"></span>
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/jingdong.png"></span>
+     <span class="text">扫码支付</span>
+    </div> 
+   </div> 
+   <div class="bt-close"> 
+    <svg t="1567152543821" class="icon" viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10924" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12"> 
+     <defs> 
+      <style type="text/css"></style> 
+     </defs> 
+     <path d="M512 438.378667L806.506667 143.893333a52.032 52.032 0 1 1 73.6 73.621334L585.621333 512l294.485334 294.485333a52.074667 52.074667 0 0 1-73.6 73.642667L512 585.621333 217.514667 880.128a52.053333 52.053333 0 1 1-73.621334-73.642667L438.378667 512 143.893333 217.514667a52.053333 52.053333 0 1 1 73.621334-73.621334L512 438.378667z" fill="" p-id="10925"></path> 
+    </svg> 
+   </div> 
+   <div class="pay-balance"> 
+    <input type="radio" class="pay-code-radio" data-type="details"> 
+    <span class="span">钱包余额</span> 
+    <span class="balance" style="color:#FC5531;font-size:14px;">0</span> 
+    <div class="pay-code-tile"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-help.png" alt=""> 
+     <div class="pay-code-content"> 
+      <div class="span"> 
+       <p class="title">抵扣说明：</p> 
+       <p> 1.余额是钱包充值的虚拟货币，按照1:1的比例进行支付金额的抵扣。<br> 2.余额无法直接购买下载，可以购买VIP、付费专栏及课程。</p> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+   <a class="pay-balance-con" href="https://i.csdn.net/#/wallet/balance/recharge" target="_blank"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/recharge.png" alt=""><span>余额充值</span></a> 
+  </div>  
+  <div class="keyword-dec-box" id="keywordDecBox"></div>       
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/cboxEditor/1.1.6/embed-editor.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-dark.css">                  
+ </body>
+</html>

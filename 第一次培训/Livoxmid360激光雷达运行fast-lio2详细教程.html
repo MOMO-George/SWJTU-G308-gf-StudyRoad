@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="zh-CN">
+ <head> 
+  <meta charset="utf-8"> 
+  <link rel="canonical" href="https://blog.csdn.net/m0_55117804/article/details/142644882"> 
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+  <meta name="renderer" content="webkit"> 
+  <meta name="force-rendering" content="webkit"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
+  <meta name="report" content="{&quot;pid&quot;: &quot;blog&quot;, &quot;spm&quot;:&quot;1001.2101&quot;}"> 
+  <meta name="referrer" content="always"> 
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="alternate" media="handheld" href="#"> 
+  <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848"> 
+  <meta name="applicable-device" content="pc"> 
+  <link href="https://g.csdnimg.cn/static/logo/favicon32.ico" rel="shortcut icon" type="image/x-icon"> 
+  <title>Livox mid360 激光雷达运行 fast-lio2 详细教程_fastlivo2-CSDN博客</title>  
+  <meta name="keywords" content="fastlivo2"> 
+  <meta name="csdn-baidu-search" content="{&quot;autorun&quot;:true,&quot;install&quot;:true,&quot;keyword&quot;:&quot;fastlivo2&quot;}"> 
+  <meta name="description" content="文章浏览阅读5.3k次，点赞36次，收藏107次。如果你想之后不想source，就去主目录的.bashrc文件自己加上去（这种ros基操就不在这说了）_fastlivo2"> 
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/css/detail_enter-a805dca594.min.css">  
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/themesSkin/skin-number/skin-number-2c93789924.min.css">    
+  <meta name="toolbar" content="{&quot;type&quot;:&quot;0&quot;,&quot;fixModel&quot;:&quot;1&quot;}">    
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css"> 
+  <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>      
+ 	<style>
+	main div.blog-content-box pre {
+		max-height: 100%;
+		overflow-y: hidden;
+	}
+	</style>
+ </head>  
+ <body class="nodata  " style=""> 
+  <div id="toolbarBox" style="min-height: 48px;"></div>    
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/pc/css/blog_code-01256533b5.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/chart-3456820cac.css"> 
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/swiper/6.0.4/css/swiper.css">   
+  <div class="main_father clearfix d-flex justify-content-center mainfather-concision" style="height:100%;"> 
+   <div class="container clearfix container-concision" id="mainBox">  
+    <main>  
+     <div class="blog-content-box"> 
+      <div class="article-header-box"> 
+       <div class="article-header"> 
+        <div class="article-title-box"> 
+         <h1 class="title-article" id="articleContentId">Livox mid360 激光雷达运行 fast-lio2 详细教程</h1> 
+        </div> 
+        <div class="article-info-box"> 
+         <div class="article-bar-top"> 
+          <img class="article-type-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/original.png" alt=""> 
+          <div class="bar-content"> 
+           <a href="https://mall.csdn.net/vip" data-report-query="spm=3001.10404" data-report-click="{&quot;spm&quot;:&quot;3001.10404&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10404&quot;}" class="article-vip-box" target="_blank"><img class="article-vip-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/identityVipNew.png" alt=""></a> 
+           <a class="follow-nickName " href="https://blog.csdn.net/m0_55117804" target="_blank" rel="noopener" title="Grampus.k">Grampus.k</a> 
+           <img class="article-time-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCurrentTime2.png" alt=""> 
+           <span class="time">于&nbsp;2024-09-29 23:42:31&nbsp;发布</span> 
+           <div class="read-count-box"> 
+            <img class="article-read-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/articleReadEyes2.png" alt=""> 
+            <span class="read-count">阅读量5.3k</span> 
+            <a id="blog_detail_zk_collection" class="un-collection" data-report-click="{&quot;mod&quot;:&quot;popu_823&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4232&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img class="article-collect-img article-heard-img un-collect-status isdefault" style="display:inline-block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollect2.png" alt=""> <img class="article-collect-img article-heard-img collect-status isactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive2.png" alt=""> <span class="name">收藏</span> <span class="get-collection"> 107 </span> </a> 
+            <div class="read-count-box is-like" data-type="top"> 
+             <img class="article-read-img article-heard-img" style="display:none" id="is-like-imgactive-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Active.png" alt=""> 
+             <img class="article-read-img article-heard-img" style="display:block" id="is-like-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Black.png" alt=""> 
+             <span class="read-count" id="blog-digg-num">点赞数 36 </span> 
+            </div> 
+           </div> 
+          </div> 
+         </div> 
+         <div class="blog-tags-box"> 
+          <div class="tags-box artic-tag-box"> 
+           <span class="label">文章标签：</span> 
+           <a rel="noopener" data-report-query="spm=1001.2101.3001.4223" data-report-click="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;无人机&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;无人机\&quot;}&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;无人机&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;无人机\&quot;}&quot;}" class="tag-link" href="https://so.csdn.net/so/search/s.do?q=%E6%97%A0%E4%BA%BA%E6%9C%BA&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank">无人机</a> 
+          </div> 
+         </div> 
+         <div class="slide-content-box"> 
+          <div class="article-copyright"> 
+           <div class="creativecommons">
+             版权声明：本文为博主原创文章，遵循
+            <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener"> CC 4.0 BY-SA </a>版权协议，转载请附上原文出处链接和本声明。 
+           </div> 
+           <div class="article-source-link">
+             本文链接：
+            <a href="https://blog.csdn.net/m0_55117804/article/details/142644882" target="_blank">https://blog.csdn.net/m0_55117804/article/details/142644882</a> 
+           </div> 
+          </div> 
+         </div> 
+         <div class="operating"> 
+          <a class="href-article-edit slide-toggle">版权</a> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div id="blogHuaweiyunAdvert"></div> 
+      <article class="baidu_pl"> 
+       <div id="article_content" class="article_content clearfix"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-704d5b9767.css"> 
+        <div id="content_views" class="htmledit_views atom-one-dark"> 
+         <p></p> 
+         <p>所需环境：</p> 
+         <p>&nbsp; &nbsp; &nbsp; &nbsp; 1、Linux版本：Ubuntu 20.04</p> 
+         <p>&nbsp; &nbsp; &nbsp; &nbsp; 2、机载电脑：i3-N305</p> 
+         <p>&nbsp; &nbsp; &nbsp; &nbsp; 3、激光雷达：mid-360</p> 
+         <p></p> 
+         <h2>一、运行mid-360</h2> 
+         <h4>1、硬件连接</h4> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.1将mid360的一分三航空线的网线插口插入机载电脑的网口中，然后给mid360上电。</h5> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.2（1）进入ubuntu设置IP地址</h5> 
+         <p class="img-center"><img alt="" height="90" src="https://i-blog.csdnimg.cn/direct/f28283e337234a26ac3fc1fdcc87b5d3.png" width="265"></p> 
+         <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; （2）按照如图设置IP地址，子网掩码和网关（无论序列号是什么，都是这样设置，后面你就知道我为什么这么说了）</p> 
+         <p class="img-center"><img alt="" height="257" src="https://i-blog.csdnimg.cn/direct/992046e89d5c49628ac1583cb0ab929c.png" width="291"></p> 
+         <p></p> 
+         <h4>2、安装并运行Livox-SDK2</h4> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 2.1 在主目录新建一个工作空间（专门用来放LIVOX相关，不要和fast-lio2放一起）</h5> 
+         <pre><code class="language-bash">mkdir livox_ws
+cd livox_ws
+mkdir src</code ></pre> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 2.2 安装 Livox-SDK2</h5> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 2.2.1 安装CMake</h5> 
+         <pre><code class="language-bash">sudo apt install cmake</code ></pre> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 2.2.2 编译并安装Livox-SDK2</h5> 
+         <pre><code class="language-bash">mkdir 3rd_party
+cd 3rd_party
+git clone https://github.com/Livox-SDK/Livox-SDK2.git
+cd ./Livox-SDK2/
+mkdir build
+cd build
+cmake .. &amp;&amp; make -j
+sudo make install</code ></pre> 
+         <p><strong>提示：</strong>如果你想删除这个SDK，你可以运行这个代码（不需要的话就不用管这个）</p> 
+         <pre><code class="language-bash">sudo rm -rf /usr/local/lib/liblivox_lidar_sdk_*
+sudo rm -rf /usr/local/include/livox_lidar_*</code ></pre> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 2.2.3 进入livox_ws/3rd_party/Livox-SDK2/samples/livox_lidar_quick_start这个文件夹，找到mid360_config.json，把 <strong>host_ip</strong> 改成 <strong>192.168.1.50</strong></h5> 
+         <p class="img-center"><img alt="" height="382" src="https://i-blog.csdnimg.cn/direct/fd1d697ffd5145f8bb28fcaa9591890a.png" width="778"></p> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 2.3 运行Livox-SDK2示例</h5> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 2.3.1 进入livox_ws/3rd_party/Livox-SDK2/build/samples/livox_lidar_quick_start这个文件夹运行如下代码</h5> 
+         <pre><code class="language-bash">./livox_lidar_quick_start ../../../samples/livox_lidar_quick_start/mid360_config.json</code ></pre> 
+         <p><strong>注意：</strong>json文件和要执行的文件不在一个文件夹！！</p> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 2.3.2 运行成功会显示以下画面，然后会有数据流一直发（如果不是这个的话可能IP错了)</h5> 
+         <p class="img-center"><img alt="" height="429" src="https://i-blog.csdnimg.cn/direct/94516a168a3d4ae78af1b68fddc91e8d.png" width="631"></p> 
+         <p></p> 
+         <h4>3、安装并运行livox_ros_driver2</h4> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 3.1 下载驱动代码</h5> 
+         <pre><code class="language-bash">cd src
+git clone https://github.com/Livox-SDK/livox_ros_driver2.git ws_livox/src/livox_ros_driver2</code ></pre> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 3.2 进入livox_ws/src/ws_livox/src/livox_ros_driver2文件夹，编译驱动代码</h5> 
+         <pre><code class="language-bash">./build.sh ROS1</code ></pre> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp;3.5 更改json文件，进入config文件夹，找到MID360_config.json文件，把里面的host_net_info的四个IP地址改成192.168.1.50，然后lidar_configs里面的IP地址改成192.168.1.1xx，xx为你的mid360序列号的最后两位（序列号在雷达侧面的二维码下，由于我的序列号最后两位是30，所以我改成192.168.1.130，你们要根据自己的雷达序列号改）</h5> 
+         <p><img alt="" height="678" src="https://i-blog.csdnimg.cn/direct/d0251832695343c8a19de0927bad3724.png" width="781"></p> 
+         <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.4 运行这个驱动</h5> 
+         <pre><code class="language-bash">source ../../devel/setup.bash
+roslaunch livox_ros_driver2 msg_MID360.launch
+roslaunch livox_ros_driver2 rviz_MID360.launch</code ></pre> 
+         <p>&nbsp; &nbsp; &nbsp; &nbsp;<strong>如果你想之后不想source，就去主目录的.bashrc文件自己加上去（这种ros基操就不在这说了）</strong></p> 
+         <p></p> 
+         <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.5 运行成功之后就是这样子，有点云显示就意味着你和雷达的通信是正常的啦！！！</h5> 
+         <p><img alt="" height="805" src="https://i-blog.csdnimg.cn/direct/5d033d6714e54981a482a191cef1ba31.png" width="1200"></p> 
+         <p></p> 
+         <h2>二、运行fast-lio2</h2> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.1 在主目录下新开一个工作空间</h5> 
+         <pre><code class="language-bash">mkdir fast_lio2_ws
+cd fast_lio2_ws
+mkdir src</code ></pre> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.2 下载并编译fast-lio2，（<strong>如果你没安装eigen库和PCL库，你就得跟着源工程的readme安装一下，我这里因为安装了，所以就不写了</strong>）</h5> 
+         <pre><code class="language-bash">cd src
+git clone https://github.com/hku-mars/FAST_LIO.git
+cd FAST_LIO
+git submodule update --init
+cd ../..
+catkin_make
+source devel/setup.bash</code ></pre> 
+         <p><strong>提示：</strong>同样的，这里的source如果你不想之后每次都source，就去主目录的.bashrc文件加上</p> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.3 到这里你就会发现，你的编译不通过嘿嘿~~</h5> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.4.1&nbsp;你需要来到这个文件夹fast_lio2_ws/src/FAST_LIO，找到里面的CMakeLists.txt，把里面的<strong>livox_ros_driver</strong>改成<strong>livox_ros_driver2</strong></h5> 
+         <p><img alt="" height="804" src="https://i-blog.csdnimg.cn/direct/c4cda41927f443b48157389540829fbb.png" width="784"></p> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.4.2 还需要在这个文件夹里面找到laserMapping.cpp，把里面所有的的<strong>livox_ros_driver</strong>改成<strong>livox_ros_driver2</strong></h5> 
+         <p class="img-center"><img alt="" height="99" src="https://i-blog.csdnimg.cn/direct/0e54d9353821473da13fc5d10fa48113.png" width="361"></p> 
+         <p class="img-center"><img alt="" height="174" src="https://i-blog.csdnimg.cn/direct/40e0e7d830ec475ebe75a30440e05d80.png" width="556"></p> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.4.3 把preprocess.h和preprocess.cpp文件里面的所有的的<strong>livox_ros_driver</strong>改成<strong>livox_ros_driver2</strong></h5> 
+         <p class="img-center"><img alt="" height="82" src="https://i-blog.csdnimg.cn/direct/f88c154aedea4edc96af929f0390f391.png" width="424"></p> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.5 现在你就可以catkin_make了，然后source一下</h5> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.6 运行fast-lio2</h5> 
+         <pre><code class="language-bash">roslaunch livox_ros_driver2 msg_MID360.launch
+roslaunch fast_lio mapping_mid360.launch</code ></pre> 
+         <p><strong>提示：</strong>前一条语句是为了开启mid360，让他输出ros话题，后面那条是开启fast-lio2</p> 
+         <h5>&nbsp; &nbsp; &nbsp; &nbsp; 1.7 演示效果</h5> 
+         <p><img alt="" height="805" src="https://i-blog.csdnimg.cn/direct/045caa6c43af444e8cf607128cec69eb.png" width="1200"></p> 
+        </div> 
+       </div> 
+      </article>  
+     </div> 
+     <div class="directory-boxshadow-dialog" style="display:none;"> 
+      <div class="directory-boxshadow-dialog-box"> 
+      </div> 
+      <div class="vip-limited-time-offer-box-new" id="vip-limited-time-offer-box-new"> 
+       <img class="limited-img limited-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-newWhite.png"> 
+       <div class="vip-limited-time-top">
+         确定要放弃本次机会？ 
+       </div> 
+       <span class="vip-limited-time-text">福利倒计时</span> 
+       <div class="limited-time-box-new"> 
+        <span class="time-hour"></span> 
+        <i>:</i> 
+        <span class="time-minite"></span> 
+        <i>:</i> 
+        <span class="time-second"></span> 
+       </div> 
+       <div class="limited-time-vip-box"> 
+        <p> <img class="coupon-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-roup.png"> <span class="def">立减 ¥</span> <span class="active limited-num"></span> </p> 
+        <span class="">普通VIP年卡可用</span> 
+       </div> 
+       <a class="limited-time-btn-new" href="https://mall.csdn.net/vip" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.9621&quot;}" data-report-query="spm=1001.2101.3001.9621">立即使用</a> 
+      </div> 
+     </div> 
+     <div class="more-toolbox-new more-toolbar" id="toolBarBox"> 
+      <div class="left-toolbox"> 
+       <div class="toolbox-left"> 
+        <div class="profile-box"> 
+         <a class="profile-href" target="_blank" href="https://blog.csdn.net/m0_55117804"><img class="profile-img" src="https://profile-avatar.csdnimg.cn/default.jpg!1"> <span class="profile-name"> Grampus.k </span> </a> 
+        </div> 
+        <div class="profile-attend"> 
+         <a class="tool-attend tool-bt-button tool-bt-attend" href="javascript:;" data-report-view="{&quot;mod&quot;:&quot;1592215036_002&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4232&quot;,&quot;extend1&quot;:&quot;关注&quot;}">关注</a> 
+         <a class="tool-item-follow active-animation" style="display:none;">关注</a> 
+        </div> 
+       </div> 
+       <div class="toolbox-middle"> 
+        <ul class="toolbox-list"> 
+         <li class="tool-item tool-item-size tool-active is-like" id="is-like" data-type="bottom"> <a class="tool-item-href"> <img style="display:none;" id="is-like-imgactive-animation-like" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarThumbUpactive.png" alt=""> <img class="isactive" style="display:none" id="is-like-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like-active.png" alt=""> <img class="isdefault" style="display:block" id="is-like-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like.png" alt=""> <span id="spanCount" class="count "> 36 </span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">点赞</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-unlike" id="is-unlike"> <a class="tool-item-href"> <img class="isactive" style="margin-right:0px;display:none" id="is-unlike-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike-active.png" alt=""> <img class="isdefault" style="margin-right:0px;display:block" id="is-unlike-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike.png" alt=""> <span id="unlikeCount" class="count "></span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">踩</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-collection "> <a class="tool-item-href" href="javascript:;" data-report-click="{&quot;mod&quot;:&quot;popu_824&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4130&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img style="display:none" id="is-collection-img-collection" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect-active.png" alt=""> <img class="isdefault" id="is-collection-img" style="display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect.png" alt=""> <img class="isactive" id="is-collection-imgactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectActive.png" alt=""> <span class="count get-collection " data-num="107" id="get-collection"> 107 </span> </a> 
+          <div class="tool-hover-tip collect"> 
+           <div class="collect-operate-box"> 
+            <span class="collect-text" id="is-collection"> 收藏 </span> 
+           </div> 
+          </div> 
+          <div class="tool-active-list"> 
+           <div class="text">
+             觉得还不错? 
+            <span class="collect-text" id="tool-active-list-collection"> 一键收藏 </span> 
+            <img id="tool-active-list-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/collectionCloseWhite.png" alt=""> 
+           </div> 
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active tool-item-comment"> 
+          <div class="guide-rr-first"> 
+           <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward01.png" alt=""> 
+           <button class="btn-guide-known">知道了</button> 
+          </div> <a class="tool-item-href go-side-comment" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.7009&quot;}"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/comment.png" alt=""> <span class="count"> 10 </span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">评论</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active tool-QRcode" data-type="article" id="tool-share"> <a class="tool-item-href" href="javascript:;" data-report-view="{&quot;spm&quot;:&quot;3001.4129&quot;,&quot;extra&quot;:{&quot;type&quot;:&quot;blogdetail&quot;}}"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/share.png" alt=""> <span class="count">分享</span> </a> 
+          <div class="QRcode active" id="tool-QRcode"> 
+           <div class="share-bg-box"> 
+            <div class="share-content"> 
+             <a id="copyPosterUrl" data-type="link" class="btn-share">复制链接</a> 
+            </div> 
+            <div class="share-content"> 
+             <a class="btn-share" data-type="qq">分享到 QQ</a> 
+            </div> 
+            <div class="share-content"> 
+             <a class="btn-share" data-type="weibo">分享到新浪微博</a> 
+            </div> 
+            <div class="share-code"> 
+             <div class="share-code-box" id="shareCode"></div> 
+             <div class="share-code-text"> 
+              <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/share/icon-wechat.png" alt="">扫一扫 
+             </div> 
+            </div> 
+           </div> 
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-more" id="is-more"> <a class="tool-item-href"> <img class="isdefault" style="margin-right:0px;display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/more.png" alt=""> <span class="count"></span> </a> 
+          <div class="more-opt-box"> 
+           <div class="mini-box"> 
+            <a class="tool-item-href" id="toolReportBtnHide"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt=""> <span class="count">举报</span> </a> 
+           </div> 
+           <div class="normal-box"> 
+            <a class="tool-item-href" id="toolReportBtnHideNormal"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt=""> <span class="count">举报</span> </a> 
+           </div> 
+          </div> </li> 
+        </ul> 
+       </div> 
+       <div class="toolbox-right"> 
+       </div> 
+      </div> 
+     </div>   
+     <a id="commentBox" name="commentBox"></a> 
+     <div id="pcCommentBox" class="comment-box comment-box-new2 login-comment-box-new" style="display:none"> 
+      <div class="has-comment" style="display:block"> 
+       <div class="one-line-box"> 
+        <div class="has-comment-tit go-side-comment"> 
+         <span class="count">10</span>&nbsp;条评论 
+        </div> 
+        <div class="has-comment-con comment-operate-item"></div> 
+        <a class="has-comment-bt-right go-side-comment focus">写评论</a> 
+       </div> 
+      </div> 
+     </div> 
+     <div class="first-recommend-box recommend-box recommend-highlight-default"> 
+      <div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/qq_52784762/article/details/132736322" data-report-view="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6661.1&quot;,&quot;mod&quot;:&quot;popu_871&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-132736322-blog-142644882.235^v43^pc_blog_bottom_relevance_base3\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746617807504_20653\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746617807504_20653&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/qq_52784762/article/details/132736322&quot;}"> 
+       <div class="content-box"> 
+        <div class="content-blog display-flex"> 
+         <div class="title-box"> 
+          <span class="type"> <img src="https://csdnimg.cn/release/blogv2/dist/components/img/blogType.png" alt=""> <span class="tip">博客</span> </span> 
+          <a href="https://blog.csdn.net/qq_52784762/article/details/132736322" class="tit" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6661.1&quot;,&quot;mod&quot;:&quot;popu_871&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-132736322-blog-142644882.235^v43^pc_blog_bottom_relevance_base3\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746617807504_20653\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746617807504_20653&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/qq_52784762/article/details/132736322&quot;}" data-report-query="spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-132736322-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-132736322-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3"> 
+           <div class="left ellipsis-online ellipsis-online-1">
+            关于在ROS1下用
+            <em>MID360</em>配置
+            <em>FAST</em>-
+            <em>LIO2</em>备忘
+           </div> </a> 
+         </div> 
+         <div class="info-box display-flex"> 
+          <div class="info"> 
+           <a href="https://blog.csdn.net/qq_52784762" target="_blank"><span class="blog-title">qq_52784762的博客</span></a> 
+          </div> 
+          <div class="info display-flex"> 
+           <span class="info-block time">09-07</span> 
+           <span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> 5932 </span> 
+          </div> 
+         </div> 
+        </div> 
+        <div class="desc-box"> 
+         <a href="https://blog.csdn.net/qq_52784762/article/details/132736322" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6661.1&quot;,&quot;mod&quot;:&quot;popu_871&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-132736322-blog-142644882.235^v43^pc_blog_bottom_relevance_base3\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746617807504_20653\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746617807504_20653&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/qq_52784762/article/details/132736322&quot;}" data-report-query="spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-132736322-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-132736322-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3"> 
+          <div class="desc ellipsis-online ellipsis-online-1">
+           在配置
+           <em>MID360</em>上遇到许多问题，终于配置完成，记录备忘
+          </div> </a> 
+        </div> 
+       </div> 
+      </div> 
+     </div>  
+     <div class="second-recommend-box recommend-box recommend-highlight-default"> 
+      <div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/z1872385/article/details/130702880" data-report-view="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.1&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-130702880-blog-142644882.235^v43^pc_blog_bottom_relevance_base3\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746617807504_20653\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746617807504_20653&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/z1872385/article/details/130702880&quot;}"> 
+       <div class="content-box"> 
+        <div class="content-blog display-flex"> 
+         <div class="title-box"> 
+          <span class="type"> <img src="https://csdnimg.cn/release/blogv2/dist/components/img/blogType.png" alt=""> <span class="tip">博客</span> </span> 
+          <a href="https://blog.csdn.net/z1872385/article/details/130702880" class="tit" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.1&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-130702880-blog-142644882.235^v43^pc_blog_bottom_relevance_base3\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746617807504_20653\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746617807504_20653&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/z1872385/article/details/130702880&quot;}" data-report-query="spm=1001.2101.3001.6650.1&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-130702880-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-130702880-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3"> 
+           <div class="left ellipsis-online ellipsis-online-1">
+            <em>livox</em> 
+            <em>mid360</em> + 
+            <em>fast</em>-livo
+           </div> 
+           <div class="tag">
+            最新发布
+           </div> </a> 
+         </div> 
+         <div class="info-box display-flex"> 
+          <div class="info"> 
+           <a href="https://blog.csdn.net/z1872385" target="_blank"><span class="blog-title">z1872385的博客</span></a> 
+          </div> 
+          <div class="info display-flex"> 
+           <span class="info-block time">05-16</span> 
+           <span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> 3995 </span> 
+          </div> 
+         </div> 
+        </div> 
+        <div class="desc-box"> 
+         <a href="https://blog.csdn.net/z1872385/article/details/130702880" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.1&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-130702880-blog-142644882.235^v43^pc_blog_bottom_relevance_base3\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746617807504_20653\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746617807504_20653&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/z1872385/article/details/130702880&quot;}" data-report-query="spm=1001.2101.3001.6650.1&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-130702880-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-130702880-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3"> 
+          <div class="desc ellipsis-online ellipsis-online-1">
+           更改
+           <em>livox</em>_ros_driver2/launch_ROS1/rviz_
+           <em>MID360</em>.launch文件内参数。更改
+           <em>livox</em>_ros_driver2/launch_ROS1/msg_
+           <em>MID360</em>.launch文件内参数。更改
+           <em>livox</em>_ros_driver2/config/
+           <em>MID360</em>_config.json文件内参数。ip改为雷达的ip，192.168.1.1** 最后两位为雷达S/N码最后两位数字。雷达的广播码在雷达后面，可以在雷达机身的QR 码下面查看，共15位数。
+          </div> </a> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div class="recommend-box insert-baidu-box  recommend-highlight-default"> 
+      <div class="recommend-item-box no-index" style="display:none"></div> 
+      <div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/m0_61463856/article/details/130575739" data-report-view="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.2&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-2-130575739-blog-142644882.235^v43^pc_blog_bottom_relevance_base3\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746617807504_20653\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746617807504_20653&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;2&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_61463856/article/details/130575739&quot;}"> 
+       <div class="content-box"> 
+        <div class="content-blog display-flex"> 
+         <div class="title-box"> 
+          <span class="type"> <img src="https://csdnimg.cn/release/blogv2/dist/components/img/blogType.png" alt=""> <span class="tip">博客</span> </span> 
+          <a href="https://blog.csdn.net/m0_61463856/article/details/130575739" class="tit" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.2&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-2-130575739-blog-142644882.235^v43^pc_blog_bottom_relevance_base3\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746617807504_20653\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746617807504_20653&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;2&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_61463856/article/details/130575739&quot;}" data-report-query="spm=1001.2101.3001.6650.2&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-130575739-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-130575739-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3"> 
+           <div class="left ellipsis-online ellipsis-online-1">
+            Ubuntu18.04+ros-melodic 
+            <em>Fast</em>-
+            <em>lio2</em>安装与实物
+            <em>运行</em>【速腾16线+imu】
+           </div> </a> 
+         </div> 
+         <div class="info-box display-flex"> 
+          <div class="info"> 
+           <a href="https://blog.csdn.net/m0_61463856" target="_blank"><span class="blog-title">m0_61463856的博客</span></a> 
+          </div> 
+          <div class="info display-flex"> 
+           <span class="info-block time">05-09</span> 
+           <span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> 3774 </span> 
+          </div> 
+         </div> 
+        </div> 
+        <div class="desc-box"> 
+         <a href="https://blog.csdn.net/m0_61463856/article/details/130575739" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.2&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-2-130575739-blog-142644882.235^v43^pc_blog_bottom_relevance_base3\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746617807504_20653\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746617807504_20653&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;2&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_61463856/article/details/130575739&quot;}" data-report-query="spm=1001.2101.3001.6650.2&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-130575739-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-130575739-blog-142644882.235%5Ev43%5Epc_blog_bottom_relevance_base3"> 
+          <div class="desc ellipsis-online ellipsis-online-1">
+           将
+           <em>fast</em>-lio/src/
+           <em>FAST</em>-LIO/config下的velodyne.yaml 话题名称修改为下图内容。
+          </div> </a> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div class="blog-footer-bottom" style="margin-top:10px;"></div>   
+    </main> 
+    <aside class="blog_container_aside"> 
+     <div id="asideProfile" class="aside-box active"> 
+      <div class="profile-intro d-flex"> 
+       <div class="avatar-box d-flex justify-content-center flex-column"> 
+        <a href="https://blog.csdn.net/m0_55117804" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_379&quot;,&quot;spm&quot;:&quot;3001.4121&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img src="https://profile-avatar.csdnimg.cn/default.jpg!1" class="avatar_pic"> </a> 
+       </div> 
+       <div class="user-info d-flex flex-column profile-intro-name-box"> 
+        <div class="profile-intro-name-boxTop"> 
+         <a href="https://blog.csdn.net/m0_55117804" target="_blank" class="" id="uid" title="Grampus.k" data-report-click="{&quot;mod&quot;:&quot;popu_379&quot;,&quot;spm&quot;:&quot;3001.4122&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804&quot;,&quot;ab&quot;:&quot;new&quot;}"> <span class="name" username="m0_55117804">Grampus.k</span> </a> 
+        </div> 
+        <div class="profile-intro-name-boxFooter-new"> 
+         <p class="profile-intro-name-leve"> <span> 博客等级 </span> <img class="level" src="https://csdnimg.cn/identity/blog2.png"> </p> 
+         <span class="profile-intro-name-years" title="已加入 CSDN 4年">码龄4年</span> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="profile-intro-rank-information"> 
+       <dl> 
+        <a href="https://blog.csdn.net/m0_55117804" data-report-click="{&quot;mod&quot;:&quot;1598321000_001&quot;,&quot;spm&quot;:&quot;3001.4310&quot;}" data-report-query="t=1"> 
+         <dd>
+          <span>9</span>
+         </dd> 
+         <dt>
+          原创
+         </dt> </a> 
+       </dl> 
+       <dl title="54"> 
+        <dd>
+         54
+        </dd> 
+        <dt>
+         点赞
+        </dt> 
+       </dl> 
+       <dl title="133"> 
+        <dd>
+         133
+        </dd> 
+        <dt>
+         收藏
+        </dt> 
+       </dl> 
+       <dl id="fanBox" title="33"> 
+        <dd>
+         <span id="fan">33</span>
+        </dd> 
+        <dt>
+         粉丝
+        </dt> 
+       </dl> 
+      </div> 
+      <div class="profile-intro-name-boxOpration"> 
+       <div class="opt-letter-watch-box"> 
+        <a class="personal-watch bt-button" id="btnAttent">关注</a> 
+       </div> 
+       <div class="opt-letter-watch-box"> 
+        <a rel="noopener" class="bt-button personal-letter" href="https://im.csdn.net/chat/m0_55117804" target="_blank">私信</a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="asideHotArticle" class="aside-box"> 
+      <h3 class="aside-title">热门文章</h3> 
+      <div class="aside-content"> 
+       <ul class="hotArticle-list"> 
+        <li> <a href="https://blog.csdn.net/m0_55117804/article/details/142644882" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882&quot;,&quot;ab&quot;:&quot;new&quot;}"> Livox mid360 激光雷达运行 fast-lio2 详细教程 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">5359</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/m0_55117804/article/details/138670845" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/138670845&quot;,&quot;ab&quot;:&quot;new&quot;}"> 雷迅cuav x7+ 连接 阿木实验室RTK 使用教程 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">2208</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/m0_55117804/article/details/133685766" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/133685766&quot;,&quot;ab&quot;:&quot;new&quot;}"> 雅可比矩阵及其有关的线性化 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">2180</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/m0_55117804/article/details/137025055" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/137025055&quot;,&quot;ab&quot;:&quot;new&quot;}"> PX4调试日志 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">397</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/m0_55117804/article/details/139601675" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/139601675&quot;,&quot;ab&quot;:&quot;new&quot;}"> kalibr问题汇总 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">385</span> </a> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div id="asideNewComments" class="aside-box"> 
+      <h3 class="aside-title">最新评论</h3> 
+      <div class="aside-content"> 
+       <ul class="newcomment-list"> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36933246" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36933246&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36933246&quot;,&quot;ab&quot;:&quot;new&quot;}">Livox mid360 激光雷达运行 fast-lio2 详细教程</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/m0_73935361" class="user-name" target="_blank">一纸战荒年: </a> <span class="code-comments">被平台强制VIP了，靠</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36821297" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36821297&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36821297&quot;,&quot;ab&quot;:&quot;new&quot;}">Livox mid360 激光雷达运行 fast-lio2 详细教程</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/scl343" class="user-name" target="_blank">scl343: </a> <span class="code-comments">dian zan <img src="https://g.csdnimg.cn/static/face/emoji/003.png" alt="表情包"></span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36769953" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36769953&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36769953&quot;,&quot;ab&quot;:&quot;new&quot;}">Livox mid360 激光雷达运行 fast-lio2 详细教程</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/qrfly123456" class="user-name" target="_blank">qrfly123456: </a> <span class="code-comments">我想问问这个ROS版本是哪个版本</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36640875" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36640875&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36640875&quot;,&quot;ab&quot;:&quot;new&quot;}">Livox mid360 激光雷达运行 fast-lio2 详细教程</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/weixin_74642444" class="user-name" target="_blank">还行555: </a> <span class="code-comments">没问题了佬，稍微等一下就好了</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36638870" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36638870&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/142644882#comments_36638870&quot;,&quot;ab&quot;:&quot;new&quot;}">Livox mid360 激光雷达运行 fast-lio2 详细教程</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/weixin_74642444" class="user-name" target="_blank">还行555: </a> <span class="code-comments">佬，为什么我执行git submodule update --init之后一直没有更新消息呢</span> </p> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div id="asideHotArticle" class="aside-box"> 
+      <h3 class="aside-title">大家在看</h3> 
+      <div class="aside-content"> 
+       <ul class="hotArticle-list"> 
+        <li> <a href="https://blog.csdn.net/m0_66468899/article/details/147750605" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_66468899/article/details/147750605&quot;,&quot;strategy&quot;:&quot;202_1052723-2789142_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_66468899/article/details/147750605&quot;,&quot;strategy&quot;:&quot;202_1052723-2789142_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> 服装|基于Java+vue的服装定制系统(源码+数据库+文档) <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">344</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/weixin_45630258/article/details/147750618" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/weixin_45630258/article/details/147750618&quot;,&quot;strategy&quot;:&quot;202_1052723-2789151_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/weixin_45630258/article/details/147750618&quot;,&quot;strategy&quot;:&quot;202_1052723-2789151_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> 居民健康监测小程序|基于微信小程序的居民健康监测小程序设计与实现(源码+数据库+文档) <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">270</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/weixin_45630258/article/details/147725112" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/weixin_45630258/article/details/147725112&quot;,&quot;strategy&quot;:&quot;202_1052723-2789153_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/weixin_45630258/article/details/147725112&quot;,&quot;strategy&quot;:&quot;202_1052723-2789153_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> 个人健康管理系统|基于微信小程序的个人健康管理系统设计与实现(源码+数据库+文档) <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">574</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/2502_91171346/article/details/147745941" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2502_91171346/article/details/147745941&quot;,&quot;strategy&quot;:&quot;202_1052723-2789134_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2502_91171346/article/details/147745941&quot;,&quot;strategy&quot;:&quot;202_1052723-2789134_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> 7.9/Q1，Charls最新文章解读 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">584</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/2501_91172494/article/details/147772657" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2501_91172494/article/details/147772657&quot;,&quot;strategy&quot;:&quot;202_1052723-2789109_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2501_91172494/article/details/147772657&quot;,&quot;strategy&quot;:&quot;202_1052723-2789109_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> NHANES指标推荐：AISI </a> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div id="asideArchive" class="aside-box" style=" width:300px;"> 
+      <h3 class="aside-title">最新文章</h3> 
+      <div class="aside-content"> 
+       <ul class="inf_list clearfix"> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/m0_55117804/article/details/140543260" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/140543260&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/140543260&quot;,&quot;ab&quot;:&quot;new&quot;}">realsense包catkin build编译失败</a> </li> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/m0_55117804/article/details/140532633" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/140532633&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/140532633&quot;,&quot;ab&quot;:&quot;new&quot;}">PX4-Avoidance调试日志</a> </li> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/m0_55117804/article/details/139601675" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/139601675&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/139601675&quot;,&quot;ab&quot;:&quot;new&quot;}">kalibr问题汇总</a> </li> 
+       </ul> 
+       <div class="archive-bar"></div> 
+       <div class="archive-box"> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/m0_55117804?type=blog&amp;year=2024&amp;month=09" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804?type=blog&amp;year=2024&amp;month=09&quot;}"><span class="year">2024年</span><span class="num">6篇</span></a>
+        </div> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/m0_55117804?type=blog&amp;year=2023&amp;month=10" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804?type=blog&amp;year=2023&amp;month=10&quot;}"><span class="year">2023年</span><span class="num">3篇</span></a>
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <!-- 详情页显示目录 --> 
+     <!--文章目录--> 
+     <div id="asidedirectory" class="aside-box"> 
+      <div class="groupfile " id="directory"> 
+       <h3 class="aside-title">目录</h3> 
+       <div class="align-items-stretch group_item" id="align-items-stretch"> 
+        <div class="pos-box"> 
+         <div class="scroll-box"> 
+          <div class="toc-box"></div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside>    
+   </div> 
+   <div class="recommend-right align-items-stretch clearfix" id="rightAside" data-type="recommend"> 
+    <aside class="recommend-right_aside"> 
+     <div class="rightside-fixed-hide"> 
+      <div class="recommend-column-box aside-box"> 
+       <h3 class="aside-title">相关专栏 </h3> 
+       <div class="aside-content"> 
+        <div class="recommend-column-itembox exp2"> 
+         <a href="https://blog.csdn.net/hltt3838/category_12620602.html" title="LiDAR-IMU" target="_blank" data-report-view="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/hltt3838/category_12620602.html&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;0\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}" data-report-click="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/hltt3838/category_12620602.html&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;0\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}"> 
+          <div class="info-box"> 
+           <div class="img-box"> 
+            <div class="column-img" style="background-image: url(https://i-blog.csdnimg.cn/columns/default/20201014180756913.png?x-oss-process=image/resize,m_fixed,h_224,w_224)" alt="LiDAR-IMU" srcset=""></div> 
+           </div> 
+           <div class="info"> 
+            <div class="title-box"> 
+             <p class="title">LiDAR-IMU</p> 
+             <p class="tag">专栏</p> 
+            </div> 
+            <p class="learn">26 人学习</p> 
+           </div> 
+          </div> <p class="desc" title="学习经典的LiDAR-IMU 开源代码、设备的搭建等">学习经典的LiDAR-IMU 开源代码、设备的搭建等</p> </a> 
+         <div class="rc-article-box"> 
+          <a href="https://blog.csdn.net/hltt3838/article/details/137068783" target="_blank" data-report-view="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/hltt3838/article/details/137068783&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;0\&quot;,\&quot;type\&quot;:\&quot;article\&quot;}&quot;}" data-report-click="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/hltt3838/article/details/137068783&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;0\&quot;,\&quot;type\&quot;:\&quot;article\&quot;}&quot;}"> 全网最<em>详细</em>的 Ubuntu 18.04 安装<em>Livox</em> mid-360驱动,测试 <em>fast</em>_<em>lio2</em> </a> 
+         </div> 
+        </div> 
+        <div class="recommend-column-itembox exp2"> 
+         <a href="https://blog.csdn.net/z1872385/category_11802999.html" title="Fast-lio2" target="_blank" data-report-view="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/z1872385/category_11802999.html&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;1\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}" data-report-click="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/z1872385/category_11802999.html&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;1\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}"> 
+          <div class="info-box"> 
+           <div class="img-box"> 
+            <div class="column-img" style="background-image: url(https://i-blog.csdnimg.cn/blog_column_migrate/296b33bd1f00cc93d437a193d04bd211.png?x-oss-process=image/resize,m_fixed,h_224,w_224)" alt="Fast-lio2" srcset=""></div> 
+           </div> 
+           <div class="info"> 
+            <div class="title-box"> 
+             <p class="title">Fast-lio2</p> 
+             <p class="tag">专栏</p> 
+            </div> 
+            <p class="learn">21 人学习</p> 
+           </div> 
+          </div> <p class="desc" title="无人机实战使用激光雷达lio">无人机实战使用激光雷达lio</p> </a> 
+         <div class="rc-article-box"> 
+          <a href="https://blog.csdn.net/z1872385/article/details/141226906" target="_blank" data-report-view="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/z1872385/article/details/141226906&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;1\&quot;,\&quot;type\&quot;:\&quot;article\&quot;}&quot;}" data-report-click="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/z1872385/article/details/141226906&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;1\&quot;,\&quot;type\&quot;:\&quot;article\&quot;}&quot;}"> 使用<em>mid360</em><em>运行</em>lio-<em>livox</em>对比<em>fast</em>-<em>lio2</em> </a> 
+         </div> 
+        </div> 
+        <div class="recommend-column-itembox exp2"> 
+         <a href="https://blog.csdn.net/m0_50230964/category_11171169.html" title="人工智能AI实战100讲" target="_blank" data-report-view="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_50230964/category_11171169.html&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;2\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}" data-report-click="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_50230964/category_11171169.html&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;2\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}"> 
+          <div class="info-box"> 
+           <div class="img-box"> 
+            <div class="column-img" style="background-image: url(https://i-blog.csdnimg.cn/blog_column_migrate/758088d2b247c99cd196d5478792b049.png?x-oss-process=image/resize,m_fixed,h_224,w_224)" alt="人工智能AI实战100讲" srcset=""></div> 
+           </div> 
+           <div class="info"> 
+            <div class="title-box"> 
+             <p class="title">人工智能AI实战100讲</p> 
+             <p class="tag">专栏</p> 
+            </div> 
+            <p class="learn">21 人学习</p> 
+           </div> 
+          </div> <p class="desc" title="机器视觉，指纹识别，人脸识别，视网膜识别，虹膜识别，掌纹识别，专家系统，自动规划，智能搜索，定理证明，博弈，自动程序设计，智能控制，机器人学，语言和图像理解，遗传编程等。">机器视觉，指纹识别，人脸识别，视网膜识别，虹膜识别，掌纹识别，专家系统，自动规划，智能搜索，定理证明，博弈，自动程序设计，智能控制，机器人学，语言和图像理解，遗传编程等。</p> </a> 
+         <div class="rc-article-box"> 
+          <a href="https://blog.csdn.net/m0_50230964/article/details/118516123" target="_blank" data-report-view="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_50230964/article/details/118516123&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;2\&quot;,\&quot;type\&quot;:\&quot;article\&quot;}&quot;}" data-report-click="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_50230964/article/details/118516123&quot;,&quot;ab&quot;:&quot;exp2&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;142644882\&quot;,\&quot;recommendCount\&quot;:\&quot;10\&quot;,\&quot;index\&quot;:\&quot;2\&quot;,\&quot;type\&quot;:\&quot;article\&quot;}&quot;}"> LiLi-OM: 走向高性能固态<em>激光雷达</em>惯性里程计和建图系统 </a> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="recommend-right"> 
+      <div class="flex-column aside-box groupfile" id="groupfile"> 
+       <div class="groupfile-div"> 
+        <h3 class="aside-title">目录</h3> 
+        <div class="align-items-stretch group_item"> 
+         <div class="pos-box"> 
+          <div class="scroll-box"> 
+           <div class="toc-box"></div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div id="asideArchive" class="aside-box" style=" width:300px;"> 
+       <h3 class="aside-title">最新文章</h3> 
+       <div class="aside-content"> 
+        <ul class="inf_list clearfix"> 
+         <li class="clearfix"> <a href="https://blog.csdn.net/m0_55117804/article/details/140543260" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/140543260&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/140543260&quot;,&quot;ab&quot;:&quot;new&quot;}">realsense包catkin build编译失败</a> </li> 
+         <li class="clearfix"> <a href="https://blog.csdn.net/m0_55117804/article/details/140532633" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/140532633&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/140532633&quot;,&quot;ab&quot;:&quot;new&quot;}">PX4-Avoidance调试日志</a> </li> 
+         <li class="clearfix"> <a href="https://blog.csdn.net/m0_55117804/article/details/139601675" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/139601675&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804/article/details/139601675&quot;,&quot;ab&quot;:&quot;new&quot;}">kalibr问题汇总</a> </li> 
+        </ul> 
+        <div class="archive-bar"></div> 
+        <div class="archive-box"> 
+         <div class="archive-list-item">
+          <a href="https://blog.csdn.net/m0_55117804?type=blog&amp;year=2024&amp;month=09" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804?type=blog&amp;year=2024&amp;month=09&quot;}"><span class="year">2024年</span><span class="num">6篇</span></a>
+         </div> 
+         <div class="archive-list-item">
+          <a href="https://blog.csdn.net/m0_55117804?type=blog&amp;year=2023&amp;month=10" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/m0_55117804?type=blog&amp;year=2023&amp;month=10&quot;}"><span class="year">2023年</span><span class="num">3篇</span></a>
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside> 
+   </div> 
+   <div class="recommend-right1  align-items-stretch clearfix" id="rightAsideConcision" data-type="recommend"> 
+    <aside class="recommend-right_aside"> 
+     <div id="recommend-right-concision"> 
+      <div class="flex-column aside-box groupfile" id="groupfileConcision"> 
+       <div class="groupfile-div1"> 
+        <h3 class="aside-title">目录</h3> 
+        <div class="align-items-stretch group_item"> 
+         <div class="pos-box"> 
+          <div class="scroll-box"> 
+           <div class="toc-box"></div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside> 
+   </div> 
+  </div> 
+  <div class="mask-dark"></div> 
+  <div class="skin-boxshadow"></div> 
+  <div class="directory-boxshadow"></div> 
+  <div class="comment-side-box-shadow comment-side-tit-close" id="commentSideBoxshadow"> 
+   <div class="comment-side-content"> 
+    <div class="comment-side-tit"> 
+     <div class="comment-side-tit-count">
+      评论&nbsp;
+      <span class="count">10</span>
+     </div> 
+     <img class="comment-side-tit-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/closeBt.png">
+    </div> 
+    <div id="pcCommentSideBox" class="comment-box comment-box-new2 " style="display:block"> 
+     <div class="comment-edit-box d-flex"> 
+      <div class="user-img"> 
+       <a href="https://blog.csdn.net/2401_86326933" target="_blank"> <img src="https://profile-avatar.csdnimg.cn/b318acc8805040cfbb8574837eaf3e4e_2401_86326933.jpg!1"> </a> 
+      </div> 
+      <form id="commentform"> 
+       <textarea class="comment-content" name="comment_content" id="comment_content" placeholder="欢迎高质量的评论，低质的评论会被折叠" maxlength="1000"></textarea> 
+       <div class="comment-reward-box" style="background-image: url('https://img-home.csdnimg.cn/images/20230131025301.png');"> 
+        <a class="btn-remove-reward"></a> 
+        <div class="form-reward-box"> 
+         <div class="info">
+           成就一亿技术人! 
+         </div> 
+         <div class="price-info">
+           拼手气红包
+          <span class="price">6.0元</span> 
+         </div> 
+        </div> 
+       </div> 
+       <div class="comment-operate-box"> 
+        <div class="comment-operate-l"> 
+         <span id="tip_comment" class="tip">还能输入<em>1000</em>个字符</span> 
+        </div> 
+        <div class="comment-operate-c">
+          &nbsp; 
+        </div> 
+        <div class="comment-operate-r"> 
+         <div class="comment-operate-item comment-reward"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentReward.png" alt="红包"> 
+          <span class="comment-operate-tip">添加红包</span> 
+         </div> 
+         <div class="comment-operate-item comment-emoticon"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentEmotionIcon.png" alt="表情包"> 
+          <span class="comment-operate-tip">插入表情</span> 
+          <div class="comment-emoticon-box comment-operate-isshow"> 
+           <div class="comment-emoticon-img-box"></div> 
+          </div> 
+         </div> 
+         <div class="comment-operate-item comment-code"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentCodeIcon.png" alt="表情包"> 
+          <span class="comment-operate-tip">代码片</span> 
+          <div class="comment-code-box comment-operate-isshow"> 
+           <ul id="commentCode"> 
+            <li><a data-code="html">HTML/XML</a></li> 
+            <li><a data-code="objc">objective-c</a></li> 
+            <li><a data-code="ruby">Ruby</a></li> 
+            <li><a data-code="php">PHP</a></li> 
+            <li><a data-code="csharp">C</a></li> 
+            <li><a data-code="cpp">C++</a></li> 
+            <li><a data-code="javascript">JavaScript</a></li> 
+            <li><a data-code="python">Python</a></li> 
+            <li><a data-code="java">Java</a></li> 
+            <li><a data-code="css">CSS</a></li> 
+            <li><a data-code="sql">SQL</a></li> 
+            <li><a data-code="plain">其它</a></li> 
+           </ul> 
+          </div> 
+         </div> 
+         <div class="comment-operate-item"> 
+          <input type="hidden" id="comment_replyId" name="comment_replyId"> 
+          <input type="hidden" id="article_id" name="article_id" value="142644882"> 
+          <input type="hidden" id="comment_userId" name="comment_userId" value=""> 
+          <input type="hidden" id="commentId" name="commentId" value=""> 
+          <a data-report-click="{&quot;mod&quot;:&quot;1582594662_003&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4227&quot;,&quot;ab&quot;:&quot;new&quot;}"> <input type="submit" class="btn-comment btn-comment-input" value="评论"> </a> 
+         </div> 
+        </div> 
+       </div> 
+      </form> 
+     </div> 
+     <div class="comment-list-container"> 
+      <div class="comment-list-box comment-operate-item"> 
+      </div> 
+      <div id="lookGoodComment" class="look-good-comment side-look-comment"> 
+       <a class="look-more-comment">查看更多评论<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowDownWhite.png" alt=""></a> 
+      </div> 
+      <div id="lookFlodComment" class="look-flod-comment"> 
+       <span class="count"></span>&nbsp;条评论被折叠&nbsp;
+       <a class="look-more-flodcomment">查看</a> 
+      </div> 
+      <div class="opt-box text-center"> 
+       <div class="btn btn-sm btn-link-blue" id="btnMoreComment"></div> 
+      </div> 
+     </div> 
+    </div> 
+    <div id="pcFlodCommentSideBox" class="pc-flodcomment-sidebox"> 
+     <div class="comment-fold-tit">
+      <span id="lookUnFlodComment" class="back"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowLeftWhite.png" alt=""></span>被折叠的&nbsp;
+      <span class="count"></span>&nbsp;条评论 
+      <a href="https://blogdev.blog.csdn.net/article/details/122245662" class="tip" target="_blank">为什么被折叠?</a> 
+      <a href="https://bbs.csdn.net/forums/FreeZone" class="park" target="_blank"> <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/iconPark.png">到【灌水乐园】发言</a> 
+     </div> 
+     <div class="comment-fold-content"></div> 
+     <div id="lookBadComment" class="look-bad-comment side-look-comment"> 
+      <a class="look-more-comment">查看更多评论<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowDownWhite.png" alt=""></a> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="comment-rewarddialog-box"> 
+    <div class="form-box"> 
+     <div class="title-box">
+       添加红包 
+      <a class="btn-form-close"></a> 
+     </div> 
+     <form id="commentRewardForm"> 
+      <div class="ipt-box"> 
+       <label for="txtName">祝福语</label> 
+       <div class="ipt-btn-box"> 
+        <input type="text" name="name" id="txtName" autocomplete="off" maxlength="50"> 
+        <a class="btn-ipt btn-random"></a> 
+       </div> 
+       <p class="notice">请填写红包祝福语或标题</p> 
+      </div> 
+      <div class="ipt-box"> 
+       <label for="txtSendAmount">红包数量</label> 
+       <div class="ipt-txt-box"> 
+        <input type="text" name="sendAmount" maxlength="4" id="txtSendAmount" placeholder="请填写红包数量(最小10个)" autocomplete="off"> 
+        <span class="after-txt">个</span> 
+       </div> 
+       <p class="notice">红包个数最小为10个</p> 
+      </div> 
+      <div class="ipt-box"> 
+       <label for="txtMoney">红包总金额</label> 
+       <div class="ipt-txt-box error"> 
+        <input type="text" name="money" maxlength="5" id="txtMoney" placeholder="请填写总金额(最低5元)" autocomplete="off"> 
+        <span class="after-txt">元</span> 
+       </div> 
+       <p class="notice">红包金额最低5元</p> 
+      </div> 
+      <div class="balance-info-box"> 
+       <label>余额支付</label> 
+       <div class="balance-info">
+         当前余额
+        <span class="balance">3.43</span>元 
+        <a href="https://i.csdn.net/#/wallet/balance/recharge" class="link-charge" target="_blank">前往充值 &gt;</a> 
+       </div> 
+      </div> 
+      <div class="opt-box"> 
+       <div class="pay-info">
+         需支付：
+        <span class="price">10.00</span>元 
+       </div> 
+       <button type="button" class="ml-auto btn-cancel">取消</button> 
+       <button type="button" class="ml8 btn-submit" disabled="true">确定</button> 
+      </div> 
+     </form> 
+    </div> 
+   </div> 
+   <div class="rr-guide-box"> 
+    <div class="rr-first-box"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward02.png" alt=""> 
+     <button class="btn-guide-known next">下一步</button> 
+    </div> 
+    <div class="rr-second-box"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward03.png" alt=""> 
+     <button class="btn-guide-known known">知道了</button> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="redEnvolope" id="redEnvolope"> 
+   <div class="env-box"> 
+    <div class="env-container"> 
+     <div class="pre-open" id="preOpen"> 
+      <div class="top"> 
+       <header> 
+        <img class="clearTpaErr" :src="redpacketAuthor.avatar" alt=""> 
+        <div class="author">
+         成就一亿技术人!
+        </div> 
+       </header> 
+       <div class="bot-icon"></div> 
+      </div> 
+      <footer> 
+       <div class="red-openbtn open-start"></div> 
+       <div class="tip">
+         领取后你会自动成为博主和红包主的粉丝 
+        <a class="rule" target="_blank">规则</a> 
+       </div> 
+      </footer> 
+     </div> 
+     <div class="opened" id="opened"> 
+      <div class="bot-icon"> 
+       <header> 
+        <a class="creatorUrl" href="" target="_blank"> <img class="clearTpaErr" src="https://profile-avatar.csdnimg.cn/default.jpg!2" alt=""> </a> 
+        <div class="author"> 
+         <div class="tt">
+          hope_wisdom
+         </div> 发出的红包 
+        </div> 
+       </header> 
+      </div> 
+      <div class="receive-box"> 
+       <header></header> 
+       <div class="receive-list"> 
+       </div> 
+      </div> 
+     </div> 
+    </div> 
+    <div class="close-btn"></div> 
+   </div> 
+  </div> 
+  <div class="pay-code"> 
+   <div class="pay-money">
+    实付
+    <span class="pay-money-span" data-nowprice="" data-oldprice="">元</span>
+   </div> 
+   <div class="content-blance">
+    <a class="blance-bt" href="javascript:;">使用余额支付</a>
+   </div> 
+   <div class="content-code"> 
+    <div id="payCode" data-id=""> 
+     <div class="renovate"> 
+      <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-time-out.png"> 
+      <span>点击重新获取</span> 
+     </div> 
+    </div> 
+    <div class="pay-style">
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/weixin.png"></span>
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/zhifubao.png"></span>
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/jingdong.png"></span>
+     <span class="text">扫码支付</span>
+    </div> 
+   </div> 
+   <div class="bt-close"> 
+    <svg t="1567152543821" class="icon" viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10924" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12"> 
+     <defs> 
+      <style type="text/css"></style> 
+     </defs> 
+     <path d="M512 438.378667L806.506667 143.893333a52.032 52.032 0 1 1 73.6 73.621334L585.621333 512l294.485334 294.485333a52.074667 52.074667 0 0 1-73.6 73.642667L512 585.621333 217.514667 880.128a52.053333 52.053333 0 1 1-73.621334-73.642667L438.378667 512 143.893333 217.514667a52.053333 52.053333 0 1 1 73.621334-73.621334L512 438.378667z" fill="" p-id="10925"></path> 
+    </svg> 
+   </div> 
+   <div class="pay-balance"> 
+    <input type="radio" class="pay-code-radio" data-type="details"> 
+    <span class="span">钱包余额</span> 
+    <span class="balance" style="color:#FC5531;font-size:14px;">0</span> 
+    <div class="pay-code-tile"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-help.png" alt=""> 
+     <div class="pay-code-content"> 
+      <div class="span"> 
+       <p class="title">抵扣说明：</p> 
+       <p> 1.余额是钱包充值的虚拟货币，按照1:1的比例进行支付金额的抵扣。<br> 2.余额无法直接购买下载，可以购买VIP、付费专栏及课程。</p> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+   <a class="pay-balance-con" href="https://i.csdn.net/#/wallet/balance/recharge" target="_blank"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/recharge.png" alt=""><span>余额充值</span></a> 
+  </div> 
+  <div style="display:none;"> 
+   <img src="" onerror="setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){var test=&quot;\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74&quot;}},3000);"> 
+  </div> 
+  <div class="keyword-dec-box" id="keywordDecBox"></div>  
+  <!-- 富文本柱状图  --> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/chart/chart.css">        
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/cboxEditor/1.1.6/embed-editor.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-dark.css">                  
+ </body>
+</html>

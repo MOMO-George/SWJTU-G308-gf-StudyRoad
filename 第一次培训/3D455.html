@@ -1,0 +1,1204 @@
+<!doctype html>
+<html lang="zh-CN">
+ <head> 
+  <meta charset="utf-8"> 
+  <link rel="canonical" href="https://blog.csdn.net/wanghq2013/article/details/123325671"> 
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+  <meta name="renderer" content="webkit"> 
+  <meta name="force-rendering" content="webkit"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
+  <meta name="report" content="{&quot;pid&quot;: &quot;blog&quot;, &quot;spm&quot;:&quot;1001.2101&quot;}"> 
+  <meta name="referrer" content="always"> 
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="alternate" media="handheld" href="#">  
+  <meta name="applicable-device" content="pc"> 
+  <link href="https://g.csdnimg.cn/static/logo/favicon32.ico" rel="shortcut icon" type="image/x-icon"> 
+  <title>Ubuntu20.04LTS下安装Intel Realsense D435i驱动与ROS包_realsense的驱动包-CSDN博客</title>  
+  <meta name="keywords" content="realsense的驱动包"> 
+  <meta name="csdn-baidu-search" content="{&quot;autorun&quot;:true,&quot;install&quot;:true,&quot;keyword&quot;:&quot;realsense的驱动包&quot;}"> 
+  <meta name="description" content="文章浏览阅读4.1w次，点赞91次，收藏591次。本文详细指导如何在Ubuntu 20.04上安装Intel D435i的驱动SDK 2.0和ROS包，包括环境配置、RealSense SDK安装、ROS相机包设置、以及常见问题解决步骤，助力你在ROS环境中高效使用D435i深度相机。"> 
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/css/detail_enter-96813d3f7c.min.css">  
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/themesSkin/skin3-template/skin3-template-762f7595fd.min.css">    
+  <meta name="toolbar" content="{&quot;type&quot;:&quot;0&quot;,&quot;fixModel&quot;:&quot;1&quot;}">   
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css"> 
+  <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>      
+ 	<style>
+	main div.blog-content-box pre {
+		max-height: 100%;
+		overflow-y: hidden;
+	}
+	</style>
+ </head>  
+ <body class="nodata  " style=""> 
+  <div id="toolbarBox" style="min-height: 48px;"></div>    
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/pc/css/blog_code-01256533b5.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/chart-3456820cac.css"> 
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/swiper/6.0.4/css/swiper.css">   
+  <div class="main_father clearfix d-flex justify-content-center mainfather-concision" style="height:100%;"> 
+   <div class="container clearfix container-concision" id="mainBox">  
+    <main>  
+     <div class="blog-content-box"> 
+      <div class="article-header-box"> 
+       <div class="article-header"> 
+        <div class="article-title-box"> 
+         <h1 class="title-article" id="articleContentId">Ubuntu20.04LTS下安装Intel Realsense D435i驱动与ROS包</h1> 
+        </div>  
+       </div> 
+      </div> 
+      <div id="blogHuaweiyunAdvert" class=""></div> 
+      <div id="blogColumnPayAdvert" class=""> 
+       <div class="column-group"> 
+        <div class="column-group-item column-group0 "> 
+         <div class="item-l"> 
+          <a class="item-target" href="https://blog.csdn.net/wanghq2013/category_9394204.html" target="_blank" title="ROS" data-report-view="{&quot;spm&quot;:&quot;1001.2101.3001.6332&quot;}" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.6332&quot;}"> <img class="item-target" src="https://i-blog.csdnimg.cn/columns/default/20201014180756757.png?x-oss-process=image/resize,m_fixed,h_224,w_224" alt=""> <span class="title item-target"> <span> <span class="tit">ROS</span> <span class="dec more">同时被 2 个专栏收录<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/newArrowDown1White.png" alt=""></span> </span> </span> </a> 
+         </div> 
+         <div class="item-m"> 
+          <span>15 篇文章</span> 
+         </div> 
+         <div class="item-r"> 
+          <a class="item-target article-column-bt articleColumnFreeBt" data-id="9394204">订阅专栏</a> 
+         </div> 
+        </div> 
+        <div class="column-group-item column-group1 "> 
+         <div class="item-l"> 
+          <a class="item-target" href="https://blog.csdn.net/wanghq2013/category_9445961.html" target="_blank" title="机器视觉" data-report-view="{&quot;spm&quot;:&quot;1001.2101.3001.6332&quot;}" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.6332&quot;}"> <img class="item-target" src="https://i-blog.csdnimg.cn/columns/default/20201014180756916.png?x-oss-process=image/resize,m_fixed,h_224,w_224" alt=""> <span class="title item-target"> <span> <span class="tit">机器视觉</span> </span> </span> </a> 
+         </div> 
+         <div class="item-m"> 
+          <span>2 篇文章</span> 
+         </div> 
+         <div class="item-r"> 
+          <a class="item-target article-column-bt articleColumnFreeBt" data-id="9445961">订阅专栏</a> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="ai-abstract-box"> 
+       <div class="ai-abstract"> 
+        <div class="abstract-content"> 
+         <img class="lock-img" src="https://i-operation.csdnimg.cn/images/a7311a21245d4888a669ca3155f1f4e5.png" alt="">本文详细指导如何在Ubuntu 20.04上安装Intel D435i的驱动SDK 2.0和ROS包，包括环境配置、RealSense SDK安装、ROS相机包设置、以及常见问题解决步骤，助力你在ROS环境中高效使用D435i深度相机。 
+        </div> 
+       </div> 
+      </div> 
+      <article class="baidu_pl"> 
+       <div id="article_content" class="article_content clearfix"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-10bf609291.css"> 
+        <div id="content_views" class="markdown_views prism-atom-one-dark"> 
+         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"> 
+          <path stroke-linecap="round" d="M5,0 0,2.5 5,5z" id="raphael-marker-block" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path> 
+         </svg> 
+         <p></p> 
+         <div class="toc"> 
+          <h4>文章目录</h4> 
+          <ul>
+           <li>
+            <ul>
+             <li><a href="#_1">目标</a></li>
+             <li><a href="#D435i_3">一、D435i简介</a></li>
+             <li><a href="#_17">二、环境配置</a></li>
+             <li><a href="#RealSenseSDK20_22">三、RealSense的SDK2.0安装</a></li>
+             <li><a href="#ROS_78">四、ROS包安装</a></li>
+             <li><a href="#CVROS_107">五、摄像机CV的ROS包节点</a></li>
+            </ul> </li>
+           <li><a href="#_438">六、问题排查</a></li>
+          </ul> 
+         </div> 
+         <p></p> 
+         <h3><a id="_1"></a>目标</h3> 
+         <p>在Ubuntu20.04LTS系统下安装D435i的驱动SDK2和ROS包，实现在ROS环境中使用D435i。</p> 
+         <h3><a id="D435i_3"></a>一、D435i简介</h3> 
+         <p>D435i是Inter公司RealSense系列摄像头的一种，采用英特尔最新的深度感应硬件和软件，封装成易于集成的产品。相比D435，D435i添加了IMU（惯性测量单元），不仅为 SLAM 和跟踪应用打开了大门，还使手持扫描系统的注册和校准更容易，在虚拟/增强现实和无人机等领域很重要。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/ff114c5df9c42f627ca71e944eb95571.png" alt="在这里插入图片描述">D435i是一个RGB-D相机，也就是我们常说的深度相机，目前深度相机的实现原理主要分为三种：分别是结构光，Tof，双目成像。<strong>REALSENSE使用的是结构光的方案</strong>。正面的<strong>四个摄像头</strong>，从左向右以次是<strong>左红外相机，红外点阵投射仪，右红外相机，和RGB相机</strong>。</p> 
+         <p>尽管具有红外投射器，但并不是采用红外反射测距。它的作用仅仅是投射不可见的固定的红外纹理样式，提高在纹理不明显的环境中（例如白墙）的深度计算精度，辅助双目视觉测距。左右两个相机将图像数据送入内置的深度处理器，在其中基于双目测距的原理计算每个像素的深度值。<br> 最高 1280×720 双目深度分辨率;<br> 最高 1920×1080 RGB 分辨率;<br> 最高 90 FPS 深度视频流。<br> 深度流与普通 RGB 视频流类似，只不过每个像素点的值不再是 RGB 或灰度值，而是物体相对于相机的距离。<br> 只能对<strong>相同帧率</strong>的 RGB 与深度视频流做同步设置。<br> 双目 baseline 为 50 mm;<br> 深度探测范围 0.2 m ~ 10 m;<br> 深度坐标系以左侧相机为中心（下图中 centerline of 1/4-20 是指三脚架螺丝空的中心）<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/5dfbb5076e182c5ff3e3342f722a4463.png" alt="在这里插入图片描述"></p> 
+         <h3><a id="_17"></a>二、环境配置</h3> 
+         <p>系统：Ubuntu20.04LTS<br> ROS：1.15.14<br> 摄像机：D435i</p> 
+         <h3><a id="RealSenseSDK20_22"></a>三、RealSense的SDK2.0安装</h3> 
+         <p>方式一：(优先)<br> 1.注册服务器的公钥</p> 
+         <pre><code class="prism language-c">sudo apt<span class="token operator">-</span>get update <span class="token operator">&amp;&amp;</span> sudo apt<span class="token operator">-</span>get upgrade <span class="token operator">&amp;&amp;</span> sudo apt<span class="token operator">-</span>get dist<span class="token operator">-</span>upgrade
+sudo apt<span class="token operator">-</span>key adv <span class="token operator">--</span>keyserver keyserver<span class="token punctuation">.</span>ubuntu<span class="token punctuation">.</span>com <span class="token operator">--</span>recv<span class="token operator">-</span>key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE <span class="token operator">||</span> sudo apt<span class="token operator">-</span>key adv <span class="token operator">--</span>keyserver hkp<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>keyserver<span class="token punctuation">.</span>ubuntu<span class="token punctuation">.</span>com<span class="token punctuation">:</span><span class="token number">80</span> <span class="token operator">--</span>recv<span class="token operator">-</span>key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
+</code ></pre> 
+         <p>2.将服务器添加到存储库列表中</p> 
+         <pre><code class="prism language-c">sudo add<span class="token operator">-</span>apt<span class="token operator">-</span>repository <span class="token string">"deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main"</span> <span class="token operator">-</span>u
+</code ></pre> 
+         <p>3.安装SDK2<br> 方式一（apt）：<br> 基础安装</p> 
+         <pre><code class="prism language-c">sudo apt<span class="token operator">-</span>get install librealsense2<span class="token operator">-</span>dkms
+sudo apt<span class="token operator">-</span>get install librealsense2<span class="token operator">-</span>utils
+</code ></pre> 
+         <p>选装</p> 
+         <pre><code class="prism language-c">sudo apt<span class="token operator">-</span>get install librealsense2<span class="token operator">-</span>dev
+sudo apt<span class="token operator">-</span>get install librealsense2<span class="token operator">-</span>dbg
+</code ></pre> 
+         <p>Tip:安装dev包后，可使用g++ -std=c++11 filename.cpp -lrealsense2 或 别的IDE来编译具有librealsense的应用。<br> 测试安装结果</p> 
+         <pre><code class="prism language-c">realsense<span class="token operator">-</span>viewer 
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/236094023ee3499f905b9cec0c754714.png#pic_center" alt="在这里插入图片描述">方式二（源代码）：<br> 下载librealsense，然后进入该目录，运行下列指令安装和编译依赖项：</p> 
+         <pre><code class="prism language-c">sudo apt<span class="token operator">-</span>get install libudev<span class="token operator">-</span>dev pkg<span class="token operator">-</span>config libgtk<span class="token operator">-</span><span class="token number">3</span><span class="token operator">-</span>dev
+sudo apt<span class="token operator">-</span>get install libusb<span class="token operator">-</span><span class="token number">1.0</span><span class="token operator">-</span><span class="token number">0</span><span class="token operator">-</span>dev pkg<span class="token operator">-</span>config
+sudo apt<span class="token operator">-</span>get install libglfw3<span class="token operator">-</span>dev
+sudo apt<span class="token operator">-</span>get install libssl<span class="token operator">-</span>dev
+
+sudo cp config<span class="token operator">/</span><span class="token number">99</span><span class="token operator">-</span>realsense<span class="token operator">-</span>libusb<span class="token punctuation">.</span>rules <span class="token operator">/</span>etc<span class="token operator">/</span>udev<span class="token operator">/</span>rules<span class="token punctuation">.</span>d<span class="token operator">/</span>
+sudo udevadm control <span class="token operator">--</span>reload<span class="token operator">-</span>rules <span class="token operator">&amp;&amp;</span> udevadm trigger 
+mkdir build
+cd build
+cmake <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token operator">/</span> <span class="token operator">-</span>DBUILD_EXAMPLES<span class="token operator">=</span>true
+make
+sudo make install
+</code ></pre> 
+         <p>测试安装结果</p> 
+         <pre><code class="prism language-c">realsense<span class="token operator">-</span>viewer 
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/730b974c89960f0e9198753f410e6d71.png#pic_center" alt="在这里插入图片描述"></p> 
+         <h3><a id="ROS_78"></a>四、ROS包安装</h3> 
+         <p>方式一（apt）：<br> 安装ROS版本的realsense2_camera</p> 
+         <pre><code class="prism language-c">sudo apt<span class="token operator">-</span>get install ros<span class="token operator">-</span>$ROS_DISTRO<span class="token operator">-</span>realsense2<span class="token operator">-</span>camera
+sudo apt<span class="token operator">-</span>get install ros<span class="token operator">-</span>$ROS_DISTRO<span class="token operator">-</span>realsense2<span class="token operator">-</span>description
+</code ></pre> 
+         <p>方式二（源代码）：<br> 进入catkin_ws工作空间的src目录，下载realsense和ddynamic_reconfigure，然后用ROS的catkin_make指令编译。</p> 
+         <pre><code class="prism language-c">cd <span class="token operator">~</span><span class="token operator">/</span>catkin_ws<span class="token operator">/</span>src
+git clone https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>IntelRealSense<span class="token operator">/</span>realsense<span class="token operator">-</span>ros<span class="token punctuation">.</span>git
+git clone https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>pal<span class="token operator">-</span>robotics<span class="token operator">/</span>ddynamic_reconfigure<span class="token punctuation">.</span>git
+cd <span class="token operator">~</span><span class="token operator">/</span>catkin_ws <span class="token operator">&amp;&amp;</span> catkin_make
+</code ></pre> 
+         <p><strong>安装rgbd-launch</strong><br> <strong>rgbd_launch</strong>是一组打开RGBD设备，并load 所有nodelets转化 raw depth/RGB/IR 流到深度图(depth image), 视差图(disparity image)和点云(point clouds)的launch文件集。</p> 
+         <pre><code class="prism language-c">sudo apt<span class="token operator">-</span>get install ros<span class="token operator">-</span>noetic<span class="token operator">-</span>rgbd<span class="token operator">-</span>launch
+</code ></pre> 
+         <p>测试编译结果：</p> 
+         <pre><code class="prism language-c">roslaunch realsense2_camera demo_pointcloud<span class="token punctuation">.</span>launch 
+
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/1252d81891bf4663ed7800300551222c.png#pic_center" alt="在这里插入图片描述"></p> 
+         <h3><a id="CVROS_107"></a>五、摄像机CV的ROS包节点</h3> 
+         <p>在catkin_ws工作空间中创建一个usb_camera包，含有一个图像消息发布节点img_publisher与图像消息接收显示节点img_viewer。<br> <strong>package.xml：</strong></p> 
+         <pre><code  style="height: 50vh;" class="prism language-c"><span class="token operator">&lt;</span>buildtool_depend<span class="token operator">&gt;</span>catkin<span class="token operator">&lt;</span><span class="token operator">/</span>buildtool_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_depend<span class="token operator">&gt;</span>cv_bridge<span class="token operator">&lt;</span><span class="token operator">/</span>build_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_depend<span class="token operator">&gt;</span>image_transport<span class="token operator">&lt;</span><span class="token operator">/</span>build_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_depend<span class="token operator">&gt;</span>roscpp<span class="token operator">&lt;</span><span class="token operator">/</span>build_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_depend<span class="token operator">&gt;</span>sensor_msgs<span class="token operator">&lt;</span><span class="token operator">/</span>build_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_depend<span class="token operator">&gt;</span>std_msgs<span class="token operator">&lt;</span><span class="token operator">/</span>build_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_depend<span class="token operator">&gt;</span>opencv2<span class="token operator">&lt;</span><span class="token operator">/</span>build_depend<span class="token operator">&gt;</span>
+
+  <span class="token operator">&lt;</span>build_export_depend<span class="token operator">&gt;</span>cv_bridge<span class="token operator">&lt;</span><span class="token operator">/</span>build_export_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_export_depend<span class="token operator">&gt;</span>image_transport<span class="token operator">&lt;</span><span class="token operator">/</span>build_export_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_export_depend<span class="token operator">&gt;</span>roscpp<span class="token operator">&lt;</span><span class="token operator">/</span>build_export_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_export_depend<span class="token operator">&gt;</span>sensor_msgs<span class="token operator">&lt;</span><span class="token operator">/</span>build_export_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_export_depend<span class="token operator">&gt;</span>std_msgs<span class="token operator">&lt;</span><span class="token operator">/</span>build_export_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>build_export_depend<span class="token operator">&gt;</span>opencv2<span class="token operator">&lt;</span><span class="token operator">/</span>build_export_depend<span class="token operator">&gt;</span>
+
+  <span class="token operator">&lt;</span>exec_depend<span class="token operator">&gt;</span>cv_bridge<span class="token operator">&lt;</span><span class="token operator">/</span>exec_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>exec_depend<span class="token operator">&gt;</span>image_transport<span class="token operator">&lt;</span><span class="token operator">/</span>exec_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>exec_depend<span class="token operator">&gt;</span>roscpp<span class="token operator">&lt;</span><span class="token operator">/</span>exec_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>exec_depend<span class="token operator">&gt;</span>sensor_msgs<span class="token operator">&lt;</span><span class="token operator">/</span>exec_depend<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>exec_depend<span class="token operator">&gt;</span>std_msgs<span class="token operator">&lt;</span><span class="token operator">/</span>exec_depend<span class="token operator">&gt;</span>
+ <span class="token operator">&lt;</span>exec_depend<span class="token operator">&gt;</span>opencv2<span class="token operator">&lt;</span><span class="token operator">/</span>exec_depend<span class="token operator">&gt;</span>
+
+  <span class="token operator">&lt;</span><span class="token operator">!</span><span class="token operator">--</span> The export tag contains other<span class="token punctuation">,</span> unspecified<span class="token punctuation">,</span> tags <span class="token operator">--</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>export<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span><span class="token operator">!</span><span class="token operator">--</span> Other tools can request additional information be placed here <span class="token operator">--</span><span class="token operator">&gt;</span>
+
+</code ></pre> 
+         <p><strong>img_publisher.cpp节点</strong>：</p> 
+         <pre><code  style="height: 50vh;" class="prism language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;ros/ros.h&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;image_transport/image_transport.h&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;opencv2/highgui.hpp&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;opencv2/calib3d.hpp&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;cv_bridge/cv_bridge.h&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+ 
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span><span class="token operator">*</span> argv<span class="token punctuation">)</span>
+<span class="token punctuation">{
+            <!-- --></span>
+  ros<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">init</span><span class="token punctuation">(</span>argc<span class="token punctuation">,</span> argv<span class="token punctuation">,</span> <span class="token string">"img_publisher"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  ros<span class="token punctuation">:</span><span class="token punctuation">:</span>NodeHandle nh<span class="token punctuation">;</span>
+  image_transport<span class="token punctuation">:</span><span class="token punctuation">:</span>ImageTransport <span class="token function">it</span><span class="token punctuation">(</span>nh<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  image_transport<span class="token punctuation">:</span><span class="token punctuation">:</span>Publisher pub <span class="token operator">=</span> it<span class="token punctuation">.</span><span class="token function">advertise</span><span class="token punctuation">(</span><span class="token string">"camera/image"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+  cv<span class="token punctuation">:</span><span class="token punctuation">:</span>VideoCapture cap<span class="token punctuation">;</span>
+  cv<span class="token punctuation">:</span><span class="token punctuation">:</span>Mat frame<span class="token punctuation">;</span>
+    
+  <span class="token keyword">int</span> deviceID<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+  
+  <span class="token keyword">if</span><span class="token punctuation">(</span>argc<span class="token operator">&gt;</span><span class="token number">1</span><span class="token punctuation">)</span>
+	deviceID<span class="token operator">=</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">-</span><span class="token string">'0'</span><span class="token punctuation">;</span>
+  <span class="token keyword">int</span> apiID<span class="token operator">=</span>cv<span class="token punctuation">:</span><span class="token punctuation">:</span>CAP_ANY<span class="token punctuation">;</span>
+  cap<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span>deviceID<span class="token operator">+</span>apiID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  
+  <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>cap<span class="token punctuation">.</span><span class="token function">isOpened</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{
+            <!-- --></span>
+	std<span class="token punctuation">:</span><span class="token punctuation">:</span>cerr<span class="token operator">&lt;&lt;</span><span class="token string">"ERROR! Unable to open camera"</span><span class="token operator">&lt;&lt;</span>std<span class="token punctuation">:</span><span class="token punctuation">:</span>endl<span class="token punctuation">;</span>
+	<span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+ 
+  ros<span class="token punctuation">:</span><span class="token punctuation">:</span>Rate <span class="token function">loop_rate</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span>nh<span class="token punctuation">.</span><span class="token function">ok</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{
+            <!-- --></span>
+	cap<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>frame<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>frame<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{
+            <!-- --></span>
+		sensor_msgs<span class="token punctuation">:</span><span class="token punctuation">:</span>ImagePtr msg <span class="token operator">=</span> cv_bridge<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">CvImage</span><span class="token punctuation">(</span>std_msgs<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">Header</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"bgr8"</span><span class="token punctuation">,</span> frame<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toImageMsg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		pub<span class="token punctuation">.</span><span class="token function">publish</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+    	ros<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">spinOnce</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	loop_rate<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code ></pre> 
+         <p><strong>img_viewer：</strong></p> 
+         <pre><code  style="height: 50vh;" class="prism language-c"><span class="token comment">//接收并查看图像消息的节点img_viewer.cpp</span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;ros/ros.h&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;image_transport/image_transport.h&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;cv_bridge/cv_bridge.h&gt;</span></span>
+ 
+ <span class="token comment">//依赖包有std_msgs（消息传递），roscpp（c++），cv_bridge（ros和opencv图像消息转换），sensor_msgs（传感器消息），image_transport（图像编码传输）</span>
+<span class="token keyword">void</span> <span class="token function">imageCallback</span><span class="token punctuation">(</span><span class="token keyword">const</span> sensor_msgs<span class="token punctuation">:</span><span class="token punctuation">:</span>ImageConstPtr<span class="token operator">&amp;</span> msg<span class="token punctuation">)</span>
+<span class="token punctuation">{
+            <!-- --></span>
+  try
+  <span class="token punctuation">{
+            <!-- --></span>
+    cv<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">imshow</span><span class="token punctuation">(</span><span class="token string">"view"</span><span class="token punctuation">,</span> cv_bridge<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">toCvShare</span><span class="token punctuation">(</span>msg<span class="token punctuation">,</span> <span class="token string">"bgr8"</span><span class="token punctuation">)</span><span class="token operator">-&gt;</span>image<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  catch <span class="token punctuation">(</span>cv_bridge<span class="token punctuation">:</span><span class="token punctuation">:</span>Exception<span class="token operator">&amp;</span> e<span class="token punctuation">)</span>
+  <span class="token punctuation">{
+            <!-- --></span>
+    <span class="token function">ROS_ERROR</span><span class="token punctuation">(</span><span class="token string">"Could not convert from '%s' to 'bgr8'."</span><span class="token punctuation">,</span> msg<span class="token operator">-&gt;</span>encoding<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+ 
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">)</span>
+<span class="token punctuation">{
+            <!-- --></span>
+  ros<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">init</span><span class="token punctuation">(</span>argc<span class="token punctuation">,</span> argv<span class="token punctuation">,</span> <span class="token string">"img_viewer"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  ros<span class="token punctuation">:</span><span class="token punctuation">:</span>NodeHandle nh<span class="token punctuation">;</span>
+  cv<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">namedWindow</span><span class="token punctuation">(</span><span class="token string">"view"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  cv<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">startWindowThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  image_transport<span class="token punctuation">:</span><span class="token punctuation">:</span>ImageTransport <span class="token function">it</span><span class="token punctuation">(</span>nh<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  image_transport<span class="token punctuation">:</span><span class="token punctuation">:</span>Subscriber sub <span class="token operator">=</span> it<span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span><span class="token string">"camera/image"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> imageCallback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  ros<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">spin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  cv<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">destroyWindow</span><span class="token punctuation">(</span><span class="token string">"view"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code ></pre> 
+         <p><strong>CMakeLists.txt：</strong></p> 
+         <pre><code  style="height: 50vh;" class="prism language-c"><span class="token function">cmake_minimum_required</span><span class="token punctuation">(</span>VERSION <span class="token number">3.0</span><span class="token number">.2</span><span class="token punctuation">)</span>
+<span class="token function">project</span><span class="token punctuation">(</span>usb_camera<span class="token punctuation">)</span>
+
+## Compile as C<span class="token operator">++</span><span class="token number">11</span><span class="token punctuation">,</span> supported in ROS Kinetic and newer
+<span class="token macro property"># add_compile_options(-std=c++11)</span>
+
+## Find catkin macros and libraries
+## <span class="token keyword">if</span> COMPONENTS list like <span class="token function">find_package</span><span class="token punctuation">(</span>catkin REQUIRED COMPONENTS xyz<span class="token punctuation">)</span>
+## is used<span class="token punctuation">,</span> also find other catkin packages
+
+<span class="token function">find_package</span><span class="token punctuation">(</span>catkin REQUIRED COMPONENTS
+  cv_bridge
+  image_transport
+  roscpp
+  sensor_msgs
+  std_msgs
+<span class="token punctuation">)</span>
+
+## System dependencies are found with CMake's conventions
+<span class="token macro property"># find_package(Boost REQUIRED COMPONENTS system)</span>
+
+<span class="token function">find_package</span><span class="token punctuation">(</span>OpenCV REQUIRED<span class="token punctuation">)</span>
+## Uncomment this <span class="token keyword">if</span> the package has a setup<span class="token punctuation">.</span>py<span class="token punctuation">.</span> This macro ensures
+## modules and global scripts declared therein get installed
+## See http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>ros<span class="token punctuation">.</span>org<span class="token operator">/</span>doc<span class="token operator">/</span>api<span class="token operator">/</span>catkin<span class="token operator">/</span>html<span class="token operator">/</span>user_guide<span class="token operator">/</span>setup_dot_py<span class="token punctuation">.</span>html
+<span class="token macro property"># catkin_python_setup()</span>
+
+################################################
+## Declare ROS messages<span class="token punctuation">,</span> services and actions ##
+################################################
+
+## To declare and build messages<span class="token punctuation">,</span> services or actions from within this
+## package<span class="token punctuation">,</span> follow these steps<span class="token punctuation">:</span>
+## <span class="token operator">*</span> Let MSG_DEP_SET be the set of packages whose message types you use in
+##   your messages<span class="token operator">/</span>services<span class="token operator">/</span>actions <span class="token punctuation">(</span>e<span class="token punctuation">.</span>g<span class="token punctuation">.</span> std_msgs<span class="token punctuation">,</span> actionlib_msgs<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">.</span>
+## <span class="token operator">*</span> In the file package<span class="token punctuation">.</span>xml<span class="token punctuation">:</span>
+##   <span class="token operator">*</span> add a build_depend tag <span class="token keyword">for</span> <span class="token string">"message_generation"</span>
+##   <span class="token operator">*</span> add a build_depend and a exec_depend tag <span class="token keyword">for</span> each package in MSG_DEP_SET
+##   <span class="token operator">*</span> If MSG_DEP_SET isn't empty the following dependency has been pulled in
+##     but can be declared <span class="token keyword">for</span> certainty nonetheless<span class="token punctuation">:</span>
+##     <span class="token operator">*</span> add a exec_depend tag <span class="token keyword">for</span> <span class="token string">"message_runtime"</span>
+## <span class="token operator">*</span> In this file <span class="token punctuation">(</span>CMakeLists<span class="token punctuation">.</span>txt<span class="token punctuation">)</span><span class="token punctuation">:</span>
+##   <span class="token operator">*</span> add <span class="token string">"message_generation"</span> and every package in MSG_DEP_SET to
+##     <span class="token function">find_package</span><span class="token punctuation">(</span>catkin REQUIRED COMPONENTS <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
+##   <span class="token operator">*</span> add <span class="token string">"message_runtime"</span> and every package in MSG_DEP_SET to
+##     <span class="token function">catkin_package</span><span class="token punctuation">(</span>CATKIN_DEPENDS <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
+##   <span class="token operator">*</span> uncomment the add_<span class="token operator">*</span>_files sections below as needed
+##     and list every <span class="token punctuation">.</span>msg<span class="token operator">/</span><span class="token punctuation">.</span>srv<span class="token operator">/</span><span class="token punctuation">.</span>action file to be processed
+##   <span class="token operator">*</span> uncomment the generate_messages entry below
+##   <span class="token operator">*</span> add every package in MSG_DEP_SET to <span class="token function">generate_messages</span><span class="token punctuation">(</span>DEPENDENCIES <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
+
+## Generate messages in the <span class="token string">'msg'</span> folder
+<span class="token macro property"># add_message_files(</span>
+<span class="token macro property">#   FILES</span>
+<span class="token macro property">#   Message1.msg</span>
+<span class="token macro property">#   Message2.msg</span>
+# <span class="token punctuation">)</span>
+
+## Generate services in the <span class="token string">'srv'</span> folder
+<span class="token macro property"># add_service_files(</span>
+<span class="token macro property">#   FILES</span>
+<span class="token macro property">#   Service1.srv</span>
+<span class="token macro property">#   Service2.srv</span>
+# <span class="token punctuation">)</span>
+
+## Generate actions in the <span class="token string">'action'</span> folder
+<span class="token macro property"># add_action_files(</span>
+<span class="token macro property">#   FILES</span>
+<span class="token macro property">#   Action1.action</span>
+<span class="token macro property">#   Action2.action</span>
+# <span class="token punctuation">)</span>
+
+## Generate added messages and services with any dependencies listed here
+<span class="token macro property"># generate_messages(</span>
+<span class="token macro property">#   DEPENDENCIES</span>
+<span class="token macro property">#   sensor_msgs#   std_msgs</span>
+# <span class="token punctuation">)</span>
+
+################################################
+## Declare ROS dynamic reconfigure parameters ##
+################################################
+
+## To declare and build dynamic reconfigure parameters within this
+## package<span class="token punctuation">,</span> follow these steps<span class="token punctuation">:</span>
+## <span class="token operator">*</span> In the file package<span class="token punctuation">.</span>xml<span class="token punctuation">:</span>
+##   <span class="token operator">*</span> add a build_depend and a exec_depend tag <span class="token keyword">for</span> <span class="token string">"dynamic_reconfigure"</span>
+## <span class="token operator">*</span> In this file <span class="token punctuation">(</span>CMakeLists<span class="token punctuation">.</span>txt<span class="token punctuation">)</span><span class="token punctuation">:</span>
+##   <span class="token operator">*</span> add <span class="token string">"dynamic_reconfigure"</span> to
+##     <span class="token function">find_package</span><span class="token punctuation">(</span>catkin REQUIRED COMPONENTS <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
+##   <span class="token operator">*</span> uncomment the <span class="token string">"generate_dynamic_reconfigure_options"</span> section below
+##     and list every <span class="token punctuation">.</span>cfg file to be processed
+
+## Generate dynamic reconfigure parameters in the <span class="token string">'cfg'</span> folder
+<span class="token macro property"># generate_dynamic_reconfigure_options(</span>
+<span class="token macro property">#   cfg/DynReconf1.cfg</span>
+<span class="token macro property">#   cfg/DynReconf2.cfg</span>
+# <span class="token punctuation">)</span>
+
+###################################
+## catkin specific configuration ##
+###################################
+## The catkin_package macro generates cmake config files <span class="token keyword">for</span> your package
+## Declare things to be passed to dependent projects
+## INCLUDE_DIRS<span class="token punctuation">:</span> uncomment this <span class="token keyword">if</span> your package contains header files
+## LIBRARIES<span class="token punctuation">:</span> libraries you create in this project that dependent projects also need
+## CATKIN_DEPENDS<span class="token punctuation">:</span> catkin_packages dependent projects also need
+## DEPENDS<span class="token punctuation">:</span> system dependencies of this project that dependent projects also need
+<span class="token function">catkin_package</span><span class="token punctuation">(</span>
+<span class="token macro property">#  INCLUDE_DIRS include</span>
+<span class="token macro property">#  LIBRARIES usb_camera</span>
+<span class="token macro property">#  CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs std_msgs</span>
+<span class="token macro property">#  DEPENDS system_lib</span>
+<span class="token punctuation">)</span>
+
+###########
+## Build ##
+###########
+
+## Specify additional locations of header files
+## Your package locations should be listed before other locations
+<span class="token function">include_directories</span><span class="token punctuation">(</span>
+<span class="token macro property"># <span class="token directive keyword">include</span></span>
+  $<span class="token punctuation">{
+            <!-- --></span>catkin_INCLUDE_DIRS<span class="token punctuation">}</span>
+  $<span class="token punctuation">{
+            <!-- --></span>OpenCV_INCLUDE_DIRS<span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
+
+## Declare a C<span class="token operator">++</span> library
+<span class="token macro property"># add_library(${PROJECT_NAME}</span>
+<span class="token macro property">#   src/${PROJECT_NAME}/usb_camera.cpp</span>
+# <span class="token punctuation">)</span>
+
+## Add cmake target dependencies of the library
+## as an example<span class="token punctuation">,</span> code may need to be generated before libraries
+## either from message generation or dynamic reconfigure
+<span class="token macro property"># add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})</span>
+
+## Declare a C<span class="token operator">++</span> executable
+## With catkin_make all packages are built within a single CMake context
+## The recommended prefix ensures that target names across packages don't collide
+<span class="token macro property"># add_executable(${PROJECT_NAME}_node src/usb_camera_node.cpp)</span>
+
+## Rename C<span class="token operator">++</span> executable without prefix
+## The above recommended prefix causes <span class="token keyword">long</span> target names<span class="token punctuation">,</span> the following renames the
+## target back to the shorter version <span class="token keyword">for</span> ease of user use
+## e<span class="token punctuation">.</span>g<span class="token punctuation">.</span> <span class="token string">"rosrun someones_pkg node"</span> instead of <span class="token string">"rosrun someones_pkg someones_pkg_node"</span>
+<span class="token macro property"># set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")</span>
+
+## Add cmake target dependencies of the executable
+## same as <span class="token keyword">for</span> the library above
+<span class="token macro property"># add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})</span>
+
+## Specify libraries to link a library or executable target against
+<span class="token macro property"># target_link_libraries(${PROJECT_NAME}_node</span>
+#   $<span class="token punctuation">{
+            <!-- --></span>catkin_LIBRARIES<span class="token punctuation">}</span>
+# <span class="token punctuation">)</span>
+<span class="token function">add_executable</span><span class="token punctuation">(</span>img_publisher src<span class="token operator">/</span>img_publisher<span class="token punctuation">.</span>cpp<span class="token punctuation">)</span>
+<span class="token function">target_link_libraries</span><span class="token punctuation">(</span>img_publisher $<span class="token punctuation">{
+            <!-- --></span>catkin_LIBRARIES<span class="token punctuation">}</span> $<span class="token punctuation">{
+            <!-- --></span>OpenCV_LIBS<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token function">add_executable</span><span class="token punctuation">(</span>img_viewer src<span class="token operator">/</span>img_viewer<span class="token punctuation">.</span>cpp<span class="token punctuation">)</span>
+<span class="token function">target_link_libraries</span><span class="token punctuation">(</span>img_viewer $<span class="token punctuation">{
+            <!-- --></span>catkin_LIBRARIES<span class="token punctuation">}</span> $<span class="token punctuation">{
+            <!-- --></span>OpenCV_LIBS<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+#############
+## Install ##
+#############
+
+<span class="token macro property"># all install targets should use catkin DESTINATION variables</span>
+<span class="token macro property"># See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html</span>
+
+## Mark executable scripts <span class="token punctuation">(</span>Python etc<span class="token punctuation">.</span><span class="token punctuation">)</span> <span class="token keyword">for</span> installation
+## in contrast to setup<span class="token punctuation">.</span>py<span class="token punctuation">,</span> you can choose the destination
+<span class="token macro property"># catkin_install_python(PROGRAMS</span>
+<span class="token macro property">#   scripts/my_python_script</span>
+<span class="token macro property">#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}</span>
+# <span class="token punctuation">)</span>
+
+## Mark executables <span class="token keyword">for</span> installation
+## See http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>docs<span class="token punctuation">.</span>ros<span class="token punctuation">.</span>org<span class="token operator">/</span>melodic<span class="token operator">/</span>api<span class="token operator">/</span>catkin<span class="token operator">/</span>html<span class="token operator">/</span>howto<span class="token operator">/</span>format1<span class="token operator">/</span>building_executables<span class="token punctuation">.</span>html
+<span class="token macro property"># install(TARGETS ${PROJECT_NAME}_node</span>
+<span class="token macro property">#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}</span>
+# <span class="token punctuation">)</span>
+
+## Mark libraries <span class="token keyword">for</span> installation
+## See http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>docs<span class="token punctuation">.</span>ros<span class="token punctuation">.</span>org<span class="token operator">/</span>melodic<span class="token operator">/</span>api<span class="token operator">/</span>catkin<span class="token operator">/</span>html<span class="token operator">/</span>howto<span class="token operator">/</span>format1<span class="token operator">/</span>building_libraries<span class="token punctuation">.</span>html
+<span class="token macro property"># install(TARGETS ${PROJECT_NAME}</span>
+<span class="token macro property">#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}</span>
+<span class="token macro property">#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}</span>
+<span class="token macro property">#   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}</span>
+# <span class="token punctuation">)</span>
+
+## Mark cpp header files <span class="token keyword">for</span> installation
+<span class="token macro property"># install(DIRECTORY include/${PROJECT_NAME}/</span>
+<span class="token macro property">#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}</span>
+<span class="token macro property">#   FILES_MATCHING PATTERN "*.h"</span>
+<span class="token macro property">#   PATTERN ".svn" EXCLUDE</span>
+# <span class="token punctuation">)</span>
+
+## Mark other files <span class="token keyword">for</span> installation <span class="token punctuation">(</span>e<span class="token punctuation">.</span>g<span class="token punctuation">.</span> launch and bag files<span class="token punctuation">,</span> etc<span class="token punctuation">.</span><span class="token punctuation">)</span>
+<span class="token macro property"># install(FILES</span>
+#   # myfile1
+#   # myfile2
+<span class="token macro property">#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}</span>
+# <span class="token punctuation">)</span>
+
+#############
+## Testing ##
+#############
+
+## Add gtest based cpp test target and link libraries
+<span class="token macro property"># catkin_add_gtest(${PROJECT_NAME}-test test/test_usb_camera.cpp)</span>
+<span class="token macro property"># <span class="token directive keyword">if</span>(TARGET ${PROJECT_NAME}-test)</span>
+<span class="token macro property">#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})</span>
+<span class="token macro property"># <span class="token directive keyword">endif</span>()</span>
+
+## Add folders to be run by python nosetests
+<span class="token macro property"># catkin_add_nosetests(test)</span>
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/c8d4aeb805200080bfb248c93ca3641f.png#pic_center" alt="在这里插入图片描述"></p> 
+         <h2><a id="_438"></a>六、问题排查</h2> 
+         <p><strong>1. 查找usb摄像头</strong><br> 在最初的节点运行时，提示找不到usb摄像头，改变摄像机的索引号也不行。查摄像头占用情况：</p> 
+         <pre><code class="prism language-c">ls  <span class="token operator">/</span>dev<span class="token operator">/</span>video<span class="token operator">*</span>
+<span class="token operator">/</span>dev<span class="token operator">/</span>video0  <span class="token operator">/</span>dev<span class="token operator">/</span>video1  <span class="token operator">/</span>dev<span class="token operator">/</span>video2  <span class="token operator">/</span>dev<span class="token operator">/</span>video3  <span class="token operator">/</span>dev<span class="token operator">/</span>video4  <span class="token operator">/</span>dev<span class="token operator">/</span>video5
+</code ></pre> 
+         <p>摄像机索引没问题。<br> 根据输出信息<code>[ WARN:0] OpenCV | GStreamer warning: Embedded video playback halted; module v4l2src0 reported: Cannot identify device '/dev/video0'. [ WARN:0] OpenCV | GStreamer warning: unable to start pipeline [ WARN:0] OpenCV | GStreamer warning: GStreamer: pipeline have not been created</code ><br> 查找相关文献，试探性的调试如下：</p> 
+         <pre><code class="prism language-c">find <span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span> <span class="token operator">-</span>name <span class="token string">"*v4l2*.ko"</span>
+
+</code ></pre> 
+         <p>显示如下信息：</p> 
+         <pre><code  style="height: 50vh;" class="prism language-c"><span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">30</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>v4l2<span class="token operator">-</span>core<span class="token operator">/</span>v4l2<span class="token operator">-</span>flash<span class="token operator">-</span>led<span class="token operator">-</span>class<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">30</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>v4l2<span class="token operator">-</span>core<span class="token operator">/</span>v4l2<span class="token operator">-</span>dv<span class="token operator">-</span>timings<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">30</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>v4l2<span class="token operator">-</span>core<span class="token operator">/</span>v4l2<span class="token operator">-</span>fwnode<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">30</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>v4l2<span class="token operator">-</span>core<span class="token operator">/</span>v4l2<span class="token operator">-</span>mem2mem<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">30</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>i2c<span class="token operator">/</span>adv7511<span class="token operator">-</span>v4l2<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">30</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>common<span class="token operator">/</span>videobuf2<span class="token operator">/</span>videobuf2<span class="token operator">-</span>v4l2<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">30</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>common<span class="token operator">/</span>v4l2<span class="token operator">-</span>tpg<span class="token operator">/</span>v4l2<span class="token operator">-</span>tpg<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">27</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>v4l2<span class="token operator">-</span>core<span class="token operator">/</span>v4l2<span class="token operator">-</span>flash<span class="token operator">-</span>led<span class="token operator">-</span>class<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">27</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>v4l2<span class="token operator">-</span>core<span class="token operator">/</span>v4l2<span class="token operator">-</span>dv<span class="token operator">-</span>timings<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">27</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>v4l2<span class="token operator">-</span>core<span class="token operator">/</span>v4l2<span class="token operator">-</span>fwnode<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">27</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>v4l2<span class="token operator">-</span>core<span class="token operator">/</span>v4l2<span class="token operator">-</span>mem2mem<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">27</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>i2c<span class="token operator">/</span>adv7511<span class="token operator">-</span>v4l2<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">27</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>common<span class="token operator">/</span>videobuf2<span class="token operator">/</span>videobuf2<span class="token operator">-</span>v4l2<span class="token punctuation">.</span>ko
+<span class="token operator">/</span>lib<span class="token operator">/</span>modules<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">27</span><span class="token operator">-</span>generic<span class="token operator">/</span>kernel<span class="token operator">/</span>drivers<span class="token operator">/</span>media<span class="token operator">/</span>common<span class="token operator">/</span>v4l2<span class="token operator">-</span>tpg<span class="token operator">/</span>v4l2<span class="token operator">-</span>tpg<span class="token punctuation">.</span>ko
+</code ></pre> 
+         <p>发现相关的ko，其中，adv7511-v4l2.ko这个是与usb摄像机相关的文件。运行：</p> 
+         <pre><code class="prism language-c">sudo modprobe adv7511<span class="token operator">-</span>v4l2
+</code ></pre> 
+         <p>然后就可以打开USB摄像机了。<strong>modprobe</strong>命令用于自动处理可载入模块，设置摄像头设备后相当于默认使用该设备。<br> 另外，用<strong>v4l2-ctl --list-devices</strong> 命令可以查看摄像头对应的设备号，如果没有v4l2-ctl，可先安装：</p> 
+         <pre><code class="prism language-c">sudo apt install v4l<span class="token operator">-</span>utils
+</code ></pre> 
+         <pre><code class="prism language-c">v4l2<span class="token operator">-</span>ctl <span class="token operator">--</span>list<span class="token operator">-</span>devices
+Video Capture <span class="token number">9</span> <span class="token punctuation">(</span>usb<span class="token operator">-</span><span class="token number">0000</span><span class="token punctuation">:</span><span class="token number">00</span><span class="token punctuation">:</span><span class="token number">14.0</span><span class="token operator">-</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token operator">/</span>dev<span class="token operator">/</span>video0
+	<span class="token operator">/</span>dev<span class="token operator">/</span>video1
+	<span class="token operator">/</span>dev<span class="token operator">/</span>video2
+	<span class="token operator">/</span>dev<span class="token operator">/</span>video3
+	<span class="token operator">/</span>dev<span class="token operator">/</span>video4
+	<span class="token operator">/</span>dev<span class="token operator">/</span>video5
+	<span class="token operator">/</span>dev<span class="token operator">/</span>media0
+	<span class="token operator">/</span>dev<span class="token operator">/</span>media1
+</code ></pre> 
+         <p>经过上述操作后并不一定完全解决问题。<br> <strong>2. 了解Gstreamer框架</strong><br> <strong>gstreamer</strong>是一个开发流式多媒体应用的开源框架，是为更好的<strong>处理音视频</strong>而设计开发的，但又不限于处理音视频，只要是有明显的<strong>数据流</strong>特征的应用。<br> gstreamer的<strong>功能核心</strong>是<strong>pipeline框架</strong>以及用于扩展功能的插件。通过gstreamer多媒体数据协商机制和同步机制，pipeline能够很好的地处理流式数据。开发者可以灵活利用已有插件，而且还可以自定义特定功能插件。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/0f42d57c346b99a067d1d27336689f95.png" alt="在这里插入图片描述"><img src="https://i-blog.csdnimg.cn/blog_migrate/dbd8da9ab4544f9a3aab0c4199ed1273.png" alt="在这里插入图片描述"><img src="https://i-blog.csdnimg.cn/blog_migrate/d213c5f4dc306e82699466354cd1e9a5.png" alt="在这里插入图片描述"></p> 
+         <p>[1] <a href="https://blog.csdn.net/qq_41754202/article/details/121318985?spm=1001.2101.3001.6650.3&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-3.queryctrv4&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-3.queryctrv4&amp;utm_relevant_index=6">Ubantu20.04安装libRealsense SDK 2.0 和ROS Wrapper for Intel RealSense Devices</a><br> [2] <a href="https://blog.csdn.net/weixin_41720528/article/details/114268106">Ubuntu20.04+RealSense D435i</a><br> [3] <a href="https://blog.csdn.net/u011888840/article/details/106146285/">ubuntu opencv 打开摄像头失败</a><br> [4] <a href="https://blog.csdn.net/u011337602/article/details/81485246?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-4.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.3&amp;utm_relevant_index=7">Gstreamer基础知识介绍</a></p> 
+        </div> 
+        <link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/markdown_views-375c595788.css" rel="stylesheet"> 
+        <link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/style-e504d6a974.css" rel="stylesheet"> 
+       </div> 
+      </article>   
+      <img src="https://img-home.csdnimg.cn/images/20211209110851.png" alt="pdf_watermark" width="0" height="0" style="display: none"> 
+      <div class="print_watermark"></div> 
+      <div class="print_watermark_info"> 
+       <p>内容来源：csdn.net</p> 
+       <p>作者昵称：wanghq2013</p> 
+       <p>原文链接：https://blog.csdn.net/wanghq2013/article/details/123325671</p> 
+       <p>作者主页：https://blog.csdn.net/wanghq2013</p> 
+      </div> 
+      <style>
+    .print_watermark, .print_watermark_info {
+      display: none
+    }
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact; /* Chrome, Safari */
+        color-adjust: exact; /* Firefox */
+        background-image: none !important;
+      }
+      * {
+        -webkit-print-color-adjust: exact;
+      }
+      .blog-content-box {
+        padding: 0;
+      }
+      .blog-content-box .article-header .article-info-box > div:not(.article-bar-top){
+        display: none !important;
+      }
+      .blog-content-box .article-header .article-info-box  .article-bar-top img{
+          display:none
+      }
+      .blog-content-box .article-header .article-info-box > .article-bar-top .bar-content > *:not(.follow-nickName):not(.time){
+          display: none !important;
+      }
+      .print_watermark {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 999;
+        background-image: url('https://img-home.csdnimg.cn/images/20211209110851.png');
+        background-size: 180px auto;
+        background-repeat: repeat;
+      }
+      .print_watermark_info {
+        display: block;
+        position: fixed;
+        bottom: 16px;
+        right: 0;
+        z-index: 1000;
+        color: #e8e8ed;
+        font-size: 12px;
+        ocapity: .5
+      }
+      @page {
+        margin: 0 10mm 10mm;
+        size: landscape;
+      }
+      body, article {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #csdn-toolbar,.main_father > *:not(#mainBox), .csdn-side-toolbar, .main_father aside {
+        display: none !important;
+      }
+      .main_father > #mainBox {
+        width: unset
+      }
+      .main_father > #mainBox > main > *:not(.blog-content-box){
+        display: none !important;
+      }
+    }
+  </style> 
+     </div>       
+     <div id="pcCommentBox" class="comment-box comment-box-new2 login-comment-box-new" style="display:none"> 
+      <div class="has-comment" style="display:block"> 
+       <div class="one-line-box"> 
+        <div class="has-comment-tit go-side-comment"> 
+         <span class="count">16</span>&nbsp;条评论 
+        </div> 
+        <div class="has-comment-con comment-operate-item"></div> 
+        <a class="has-comment-bt-right go-side-comment focus">写评论</a> 
+       </div> 
+      </div> 
+     </div>     
+     <div class="blog-footer-bottom" style="margin-top:10px;"></div>   
+    </main> 
+    <aside class="blog_container_aside "> 
+     <div id="asideProfile" class="aside-box active"> 
+      <div class="profile-intro d-flex"> 
+       <div class="avatar-box d-flex justify-content-center flex-column"> 
+        <a href="https://blog.csdn.net/wanghq2013" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_379&quot;,&quot;spm&quot;:&quot;3001.4121&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img src="https://profile-avatar.csdnimg.cn/default.jpg!1" class="avatar_pic"> </a> 
+       </div> 
+       <div class="user-info d-flex flex-column profile-intro-name-box"> 
+        <div class="profile-intro-name-boxTop"> 
+         <a href="https://blog.csdn.net/wanghq2013" target="_blank" class="" id="uid" title="wanghq2013" data-report-click="{&quot;mod&quot;:&quot;popu_379&quot;,&quot;spm&quot;:&quot;3001.4122&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013&quot;,&quot;ab&quot;:&quot;new&quot;}"> <span class="name" username="wanghq2013">wanghq2013</span> </a> 
+        </div> 
+        <div class="profile-intro-name-boxFooter-new"> 
+         <p class="profile-intro-name-leve"> <span> 博客等级 </span> <img class="level" src="https://csdnimg.cn/identity/blog3.png"> </p> 
+         <span class="profile-intro-name-years" title="已加入 CSDN 9年">码龄9年</span> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="profile-intro-rank-information"> 
+       <dl> 
+        <a href="https://blog.csdn.net/wanghq2013" data-report-click="{&quot;mod&quot;:&quot;1598321000_001&quot;,&quot;spm&quot;:&quot;3001.4310&quot;}" data-report-query="t=1"> 
+         <dd>
+          <span>24</span>
+         </dd> 
+         <dt>
+          原创
+         </dt> </a> 
+       </dl> 
+       <dl title="140"> 
+        <dd>
+         140
+        </dd> 
+        <dt>
+         点赞
+        </dt> 
+       </dl> 
+       <dl title="875"> 
+        <dd>
+         875
+        </dd> 
+        <dt>
+         收藏
+        </dt> 
+       </dl> 
+       <dl id="fanBox" title="217"> 
+        <dd>
+         <span id="fan">217</span>
+        </dd> 
+        <dt>
+         粉丝
+        </dt> 
+       </dl> 
+      </div> 
+      <div class="profile-intro-name-boxOpration"> 
+       <div class="opt-letter-watch-box"> 
+        <a class="personal-watch bt-button" id="btnAttent">已关注</a> 
+       </div> 
+       <div class="opt-letter-watch-box"> 
+        <a rel="noopener" class="bt-button personal-letter" href="https://im.csdn.net/chat/wanghq2013" target="_blank">私信</a> 
+       </div> 
+      </div> 
+     </div> 
+     <div class="swiper-remuneration-container" id="swiper-remuneration-container"> 
+      <div class="swiper-wrapper"> 
+       <!-- 这里可以添加多个Swiper幻灯片 --> 
+       <div class="swiper-slide"> 
+        <a data-report-click="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;0&quot;}}" data-report-swiper="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;0&quot;}}" href="https://activity.csdn.net/writing?id=11002" target="_blank"> <img src="https://i-operation.csdnimg.cn/images/7507485b3f07424682705675dd2505d5.png" alt=""> </a> 
+       </div> 
+       <div class="swiper-slide"> 
+        <a data-report-click="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;1&quot;}}" data-report-swiper="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;1&quot;}}" href="https://mall.csdn.net/vip?utm_source=251024_vip_blogleftbanner" target="_blank"> <img src="https://i-operation.csdnimg.cn/images/244d7aa2c02e48218bc313200b7a5e00.png" alt=""> </a> 
+       </div> 
+       <div class="swiper-slide"> 
+        <a data-report-click="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;2&quot;}}" data-report-swiper="{&quot;spm&quot;:&quot;3001.9728&quot;,&quot;extra&quot;:{&quot;index&quot;:&quot;2&quot;}}" href="https://mp.csdn.net/edit?utm_source=blog" target="_blank"> <img src="https://i-operation.csdnimg.cn/images/bfc20af708654cc689adbb6361f6dc98.png" alt=""> </a> 
+       </div> 
+      </div> 
+      <div class="swiper-remuneration-pagination"></div> 
+      <!-- 如果需要导航按钮 --> 
+      <div class="swiper-remuneration-button-prev"></div> 
+      <div class="swiper-remuneration-button-next"></div> 
+     </div> 
+     <div id="asideHotArticle" class="aside-box"> 
+      <h3 class="aside-title">热门文章</h3> 
+      <div class="aside-content"> 
+       <ul class="hotArticle-list"> 
+        <li> <a href="https://blog.csdn.net/wanghq2013/article/details/123325671" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671&quot;,&quot;ab&quot;:&quot;new&quot;}"> Ubuntu20.04LTS下安装Intel Realsense D435i驱动与ROS包 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">41231</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/wanghq2013/article/details/121955626" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/121955626&quot;,&quot;ab&quot;:&quot;new&quot;}"> VSCode配置C++环境（MSVC） <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">8491</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/wanghq2013/article/details/121392282" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/121392282&quot;,&quot;ab&quot;:&quot;new&quot;}"> 在Ubuntu20.04 LTS中安装OpenCV4.5.4 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">7785</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/wanghq2013/article/details/102647100" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/102647100&quot;,&quot;ab&quot;:&quot;new&quot;}"> 移动机器人运动学:阿克曼模型 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">7764</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/wanghq2013/article/details/107015411" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/107015411&quot;,&quot;ab&quot;:&quot;new&quot;}"> MATLAB安装机器人工具箱 Matlab_Robotic_Toolbox_v10.2 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">4700</span> </a> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div id="asideCategory" class="aside-box aside-box-column flexible-box-new"> 
+      <h3 class="aside-title">分类专栏</h3> 
+      <div class="aside-content" id="aside-content"> 
+       <ul> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_10145476.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_10145476.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/blog_column_migrate/586dad44b33c654c8f94450ee15b9265.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 机器人学 </span> </a> <span class="special-column-num">1篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9394204.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9394204.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756757.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> ROS </span> </a> <span class="special-column-num">15篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_11484599.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_11484599.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756927.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> Ubuntu </span> </a> <span class="special-column-num">6篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_12304049.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_12304049.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> ROS2 </span> </a> <span class="special-column-num">2篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9445946.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9445946.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756913.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> SLAM </span> </a> <span class="special-column-num">2篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9445961.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9445961.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756916.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 机器视觉 </span> </a> <span class="special-column-num">2篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9437580.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9437580.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756757.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> STM32 </span> </a> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9441227.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9441227.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756780.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 移动机器人 </span> </a> <span class="special-column-num">1篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9406145.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9406145.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 树莓派 </span> </a> </li> 
+       </ul> 
+      </div> 
+      <p class="text-center"> <a class="flexible-btn-new" data-report-click="{&quot;spm&quot;:&quot;3001.10779&quot;,&quot;strategy&quot;:&quot;展开全部&quot;}" data-maxheight="0" data-minheight="208px" data-fbox="#aside-content" data-flag="flag"><span class="text">展开全部</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-bot-White.png" alt=""></a> <a class="flexible-btn-new-close" data-report-click="{&quot;spm&quot;:&quot;3001.10779&quot;,&quot;strategy&quot;:&quot;收起&quot;}" data-minheight="208px" data-fbox="#aside-content" data-scroll="true" data-flag="flag"><span class="text">收起</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-top-White.png" alt=""></a> </p> 
+     </div> 
+     <div class="article-previous" id="article-previous"> 
+      <dl data-report-click="{&quot;spm&quot;:&quot;3001.10752&quot;,&quot;extend1&quot;:&quot;上一篇&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10752&quot;,&quot;extend1&quot;:&quot;上一篇&quot;}"> 
+       <dt>
+         上一篇： 
+       </dt> 
+       <dd> 
+        <a href="https://blog.csdn.net/wanghq2013/article/details/123271447" data-report-query="spm=3001.10752"> ROS节点发布消息控制RVIZ中的MAKER </a> 
+       </dd> 
+      </dl> 
+      <dl class="next" data-report-click="{&quot;spm&quot;:&quot;3001.10796&quot;,&quot;extend1&quot;:&quot;下一篇&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10796&quot;,&quot;extend1&quot;:&quot;下一篇&quot;}"> 
+       <dt>
+         下一篇： 
+       </dt> 
+       <dd> 
+        <a href="https://blog.csdn.net/wanghq2013/article/details/123545506" data-report-query="spm=3001.10796"> SLAM(0) </a> 
+       </dd> 
+      </dl> 
+     </div> 
+     <div id="asideNewComments" class="aside-box"> 
+      <h3 class="aside-title">最新评论</h3> 
+      <div class="aside-content"> 
+       <ul class="newcomment-list"> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37949165" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37949165&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37949165&quot;,&quot;ab&quot;:&quot;new&quot;}">Ubuntu20.04LTS下安装Intel Realsense D435i驱动与ROS包</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/weixin_45763958" class="user-name" target="_blank">weixin_45763958: </a> <span class="code-comments">你好，博主，你的主机是什么配置？我用的RK3588可视化图形出不来有办法解决吗？</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37732033" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37732033&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37732033&quot;,&quot;ab&quot;:&quot;new&quot;}">Ubuntu20.04LTS下安装Intel Realsense D435i驱动与ROS包</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/weixin_70413951" class="user-name" target="_blank">喜欢睡觉345: </a> <span class="code-comments">通常是USB借口的问题，更换一下借口或者在虚拟机的USB接口设置一下USB2.0或者USB3.0</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37534570" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37534570&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37534570&quot;,&quot;ab&quot;:&quot;new&quot;}">Ubuntu20.04LTS下安装Intel Realsense D435i驱动与ROS包</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/2402_88877936" class="user-name" target="_blank">nbdxb1: </a> <span class="code-comments">解决了吗 我也这样</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37450056" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37450056&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37450056&quot;,&quot;ab&quot;:&quot;new&quot;}">Ubuntu20.04LTS下安装Intel Realsense D435i驱动与ROS包</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/qq_58452881" class="user-name" target="_blank">小小哆啦A梦: </a> <span class="code-comments">很赞，按照对应流程能走完。但我出现了显卡驱动被更改，网卡驱动被更改的情况，经手动处理解决，最终可以正常使用。（拯救者Y7000P2024，供参考）</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37446135" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37446135&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/123325671#comments_37446135&quot;,&quot;ab&quot;:&quot;new&quot;}">Ubuntu20.04LTS下安装Intel Realsense D435i驱动与ROS包</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/qq_42234071" class="user-name" target="_blank">小小一呀: </a> <span class="code-comments">您好，输入“realsense-viewer ”可以启动“Intel RealSense Viewer”窗口，但是识别不到摄像头，这是咋回事呀？</span> </p> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div id="asideHotArticle" class="aside-box"> 
+      <h3 class="aside-title">大家在看</h3> 
+      <div class="aside-content"> 
+       <ul class="hotArticle-list"> 
+        <li> <a href="https://blog.csdn.net/small_ccb/article/details/153753610" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/small_ccb/article/details/153753610&quot;,&quot;strategy&quot;:&quot;202_1052723-3457414_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/small_ccb/article/details/153753610&quot;,&quot;strategy&quot;:&quot;202_1052723-3457414_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> 基于黑翅鸢算法优化轻量级梯度提升机(BKA-LightGBM)的数据多特征分类预测 Matlab代码 </a> </li> 
+        <li> <a href="https://blog.csdn.net/2301_80220607/article/details/153570675" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2301_80220607/article/details/153570675&quot;,&quot;strategy&quot;:&quot;202_1052723-3457391_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2301_80220607/article/details/153570675&quot;,&quot;strategy&quot;:&quot;202_1052723-3457391_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> 【Redis学习】Redis事务 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">851</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/2501_93873343/article/details/153753614" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2501_93873343/article/details/153753614&quot;,&quot;strategy&quot;:&quot;202_1052723-3457399_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2501_93873343/article/details/153753614&quot;,&quot;strategy&quot;:&quot;202_1052723-3457399_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> leetcode easy2 </a> </li> 
+        <li> <a href="https://blog.csdn.net/qq_57069342/article/details/153482131" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/qq_57069342/article/details/153482131&quot;,&quot;strategy&quot;:&quot;202_1052723-3457411_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/qq_57069342/article/details/153482131&quot;,&quot;strategy&quot;:&quot;202_1052723-3457411_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> 【嵌入式小白从入门到实践】【C 语言】：09_指针（Pointer） <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">669</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/2501_92809516/article/details/153753603" target="_blank" data-report-click="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2501_92809516/article/details/153753603&quot;,&quot;strategy&quot;:&quot;202_1052723-3457406_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10093&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2501_92809516/article/details/153753603&quot;,&quot;strategy&quot;:&quot;202_1052723-3457406_RCMD&quot;,&quot;ab&quot;:&quot;new&quot;}"> Vue 3 项目创建（使用Vite）：如何使用Vite快速创建一个Vue 3项目 </a> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div id="asideArchive" class="aside-box" style="display:block!important; width:300px;"> 
+      <h3 class="aside-title">最新文章</h3> 
+      <div class="aside-content"> 
+       <ul class="inf_list clearfix"> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/wanghq2013/article/details/130600591" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/130600591&quot;,&quot;ab&quot;:&quot;left&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/130600591&quot;,&quot;ab&quot;:&quot;left&quot;}">ROS 下 激光扫描仪 YDLidar-G4 使用</a> </li> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/wanghq2013/article/details/130411670" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/130411670&quot;,&quot;ab&quot;:&quot;left&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/130411670&quot;,&quot;ab&quot;:&quot;left&quot;}">ROS2 学习--创建自己的消息，并被其它节点使用</a> </li> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/wanghq2013/article/details/130409683" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/130409683&quot;,&quot;ab&quot;:&quot;left&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/article/details/130409683&quot;,&quot;ab&quot;:&quot;left&quot;}">ROS2 学习--新建ros2工作空间和功能包</a> </li> 
+       </ul> 
+       <div class="archive-bar"></div> 
+       <div class="archive-box"> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/wanghq2013?type=blog&amp;year=2023&amp;month=05" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013?type=blog&amp;year=2023&amp;month=05&quot;}"><span class="year">2023年</span><span class="num">3篇</span></a>
+        </div> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/wanghq2013?type=blog&amp;year=2022&amp;month=03" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013?type=blog&amp;year=2022&amp;month=03&quot;}"><span class="year">2022年</span><span class="num">7篇</span></a>
+        </div> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/wanghq2013?type=blog&amp;year=2021&amp;month=12" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013?type=blog&amp;year=2021&amp;month=12&quot;}"><span class="year">2021年</span><span class="num">8篇</span></a>
+        </div> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/wanghq2013?type=blog&amp;year=2020&amp;month=06" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013?type=blog&amp;year=2020&amp;month=06&quot;}"><span class="year">2020年</span><span class="num">1篇</span></a>
+        </div> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/wanghq2013?type=blog&amp;year=2019&amp;month=10" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013?type=blog&amp;year=2019&amp;month=10&quot;}"><span class="year">2019年</span><span class="num">6篇</span></a>
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <!-- 详情页显示目录 --> 
+     <!--文章目录--> 
+     <div id="asidedirectory" class="aside-box"> 
+      <div class="groupfile groupfile-active" id="directory"> 
+       <h3 class="aside-title">目录</h3> 
+       <div class="align-items-stretch group_item" id="align-items-stretch"> 
+        <div class="pos-box"> 
+         <div class="scroll-box"> 
+          <div class="toc-box"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <p class="flexible-btn-new active" id="flexible-btn-groupfile" data-report-click="{&quot;spm&quot;:&quot;3001.10780&quot;,&quot;strategy&quot;:&quot;展开全部&quot;}" data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch"><span class="text">展开全部</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-bot-White.png" alt=""></p> 
+       <p class="flexible-btn-new-close active" data-report-click="{&quot;spm&quot;:&quot;3001.10780&quot;,&quot;strategy&quot;:&quot;收起&quot;}" data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch"><span class="text">收起</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-top-White.png" alt=""></p> 
+      </div> 
+     </div> 
+    </aside>    
+   </div> 
+   <div class="recommend-right align-items-stretch clearfix" id="rightAside" data-type="recommend"> 
+    <aside class="recommend-right_aside"> 
+     <div class="rightside-fixed-hide"> 
+     </div> 
+     <div id="recommend-right"> 
+      <div class="flex-column aside-box groupfile groupfile-active " id="groupfile"> 
+       <div class="groupfile-div"> 
+        <h3 class="aside-title">目录</h3> 
+        <div class="align-items-stretch group_item" id="align-items-stretch-right"> 
+         <div class="pos-box"> 
+          <div class="scroll-box"> 
+           <div class="toc-box"></div> 
+          </div> 
+         </div> 
+        </div> 
+        <p class="flexible-btn-new" id="flexible-btn-groupfile" data-report-click="{&quot;spm&quot;:&quot;3001.10782&quot;,&quot;strategy&quot;:&quot;展开全部&quot;}" data-traigger="true" data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch-right"><span class="text">展开全部</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-bot-White.png" alt=""></p> 
+        <p class="flexible-btn-new-close close" data-report-click="{&quot;spm&quot;:&quot;3001.10782&quot;,&quot;strategy&quot;:&quot;收起&quot;}" data-traigger="true" data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch-right"><span class="text">收起</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-top-White.png" alt=""></p> 
+       </div> 
+      </div> 
+      <div class="article-previous" id="article"> 
+       <dl data-report-click="{&quot;spm&quot;:&quot;3001.10752&quot;,&quot;extend1&quot;:&quot;上一篇&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10752&quot;,&quot;extend1&quot;:&quot;上一篇&quot;}"> 
+        <dt>
+          上一篇： 
+        </dt> 
+        <dd> 
+         <a href="https://blog.csdn.net/wanghq2013/article/details/123271447" data-report-query="spm=3001.10752"> ROS节点发布消息控制RVIZ中的MAKER </a> 
+        </dd> 
+       </dl> 
+       <dl class="next" data-report-click="{&quot;spm&quot;:&quot;3001.10796&quot;,&quot;extend1&quot;:&quot;下一篇&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10796&quot;,&quot;extend1&quot;:&quot;下一篇&quot;}"> 
+        <dt>
+          下一篇： 
+        </dt> 
+        <dd> 
+         <a href="https://blog.csdn.net/wanghq2013/article/details/123545506" data-report-query="spm=3001.10796"> SLAM(0) </a> 
+        </dd> 
+       </dl> 
+      </div> 
+      <div class="aside-box kind_person d-flex flex-column flexible-box-new"> 
+       <h3 class="aside-title">分类专栏</h3> 
+       <div class="align-items-stretch kindof_item" id="kind_person_column"> 
+        <div class="aside-content" id="aside-content-column"> 
+         <ul> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_10145476.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_10145476.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/blog_column_migrate/586dad44b33c654c8f94450ee15b9265.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 机器人学 </span> </a> <span class="special-column-num">1篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9394204.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9394204.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756757.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> ROS </span> </a> <span class="special-column-num">15篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_11484599.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_11484599.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756927.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> Ubuntu </span> </a> <span class="special-column-num">6篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_12304049.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_12304049.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> ROS2 </span> </a> <span class="special-column-num">2篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9445946.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9445946.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756913.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> SLAM </span> </a> <span class="special-column-num">2篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9445961.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9445961.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756916.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 机器视觉 </span> </a> <span class="special-column-num">2篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9437580.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9437580.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756757.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> STM32 </span> </a> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9441227.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9441227.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756780.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 移动机器人 </span> </a> <span class="special-column-num">1篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/wanghq2013/category_9406145.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/wanghq2013/category_9406145.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 树莓派 </span> </a> </li> 
+         </ul> 
+        </div> 
+        <p class="text-center"> <a class="flexible-btn-new" data-report-click="{&quot;spm&quot;:&quot;3001.10783&quot;,&quot;strategy&quot;:&quot;展开全部&quot;}" data-traigger="true" data-maxheight="0" data-minheight="208px" data-fbox="#aside-content-column" data-flag="flag"><span class="text">展开全部</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-bot-White.png" alt=""></a> <a class="flexible-btn-new-close" data-report-click="{&quot;spm&quot;:&quot;3001.10783&quot;,&quot;strategy&quot;:&quot;收起&quot;}" data-traigger="true" data-minheight="208px" data-fbox="#aside-content-column" data-scroll="true" data-flag="flag"><span class="text">收起</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-top-White.png" alt=""></a> </p> 
+       </div> 
+      </div> 
+     </div> 
+    </aside> 
+   </div> 
+   <div class="recommend-right1  align-items-stretch clearfix" id="rightAsideConcision" data-type="recommend"> 
+    <aside class="recommend-right_aside"> 
+     <div id="recommend-right-concision"> 
+      <div class="flex-column aside-box groupfile" id="groupfileConcision"> 
+       <div class="groupfile-div1"> 
+        <h3 class="aside-title">目录</h3> 
+        <div class="align-items-stretch group_item"> 
+         <div class="pos-box"> 
+          <div class="scroll-box"> 
+           <div class="toc-box"></div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside> 
+   </div> 
+  </div> 
+  <div class="mask-dark"></div> 
+  <div class="skin-boxshadow"></div> 
+  <div class="directory-boxshadow"></div> 
+  <div class="comment-side-box-shadow comment-side-tit-close" id="commentSideBoxshadow"> 
+   <div class="comment-side-content"> 
+    <div class="comment-side-tit"> 
+     <div class="comment-side-tit-count">
+      评论&nbsp;
+      <span class="count">16</span>
+     </div> 
+     <img class="comment-side-tit-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/closeBt.png">
+    </div> 
+    <div id="pcCommentSideBox" class="comment-box comment-box-new2 " style="display:block"> 
+     <div class="comment-edit-box d-flex"> 
+      <div class="user-img"> 
+       <a href="https://blog.csdn.net/2501_93896013" target="_blank"> <img src="https://profile-avatar.csdnimg.cn/default.jpg!1"> </a> 
+      </div> 
+      <form id="commentform"> 
+       <textarea class="comment-content" name="comment_content" id="comment_content" placeholder="欢迎高质量的评论，低质的评论会被折叠" maxlength="1000"></textarea> 
+       <div class="comment-reward-box" style="background-image: url('https://img-home.csdnimg.cn/images/20230131025301.png');"> 
+        <a class="btn-remove-reward"></a> 
+        <div class="form-reward-box"> 
+         <div class="info">
+           成就一亿技术人! 
+         </div> 
+         <div class="price-info">
+           拼手气红包
+          <span class="price">6.0元</span> 
+         </div> 
+        </div> 
+       </div> 
+       <div class="comment-operate-box"> 
+        <div class="comment-operate-l"> 
+         <span id="tip_comment" class="tip">还能输入<em>1000</em>个字符</span> 
+        </div> 
+        <div class="comment-operate-c">
+          &nbsp; 
+        </div> 
+        <div class="comment-operate-r"> 
+         <div class="comment-operate-item comment-reward"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentReward.png" alt="红包"> 
+          <span class="comment-operate-tip">添加红包</span> 
+         </div> 
+         <div class="comment-operate-item comment-emoticon"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentEmotionIcon.png" alt="表情包"> 
+          <span class="comment-operate-tip">插入表情</span> 
+          <div class="comment-emoticon-box comment-operate-isshow"> 
+           <div class="comment-emoticon-img-box"></div> 
+          </div> 
+         </div> 
+         <div class="comment-operate-item comment-code"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentCodeIcon.png" alt="表情包"> 
+          <span class="comment-operate-tip">代码片</span> 
+          <div class="comment-code-box comment-operate-isshow"> 
+           <ul id="commentCode"> 
+            <li><a data-code="html">HTML/XML</a></li> 
+            <li><a data-code="objc">objective-c</a></li> 
+            <li><a data-code="ruby">Ruby</a></li> 
+            <li><a data-code="php">PHP</a></li> 
+            <li><a data-code="csharp">C</a></li> 
+            <li><a data-code="cpp">C++</a></li> 
+            <li><a data-code="javascript">JavaScript</a></li> 
+            <li><a data-code="python">Python</a></li> 
+            <li><a data-code="java">Java</a></li> 
+            <li><a data-code="css">CSS</a></li> 
+            <li><a data-code="sql">SQL</a></li> 
+            <li><a data-code="plain">其它</a></li> 
+           </ul> 
+          </div> 
+         </div> 
+         <div class="comment-operate-item"> 
+          <input type="hidden" id="comment_replyId" name="comment_replyId"> 
+          <input type="hidden" id="article_id" name="article_id" value="123325671"> 
+          <input type="hidden" id="comment_userId" name="comment_userId" value=""> 
+          <input type="hidden" id="commentId" name="commentId" value=""> 
+          <a data-report-click="{&quot;mod&quot;:&quot;1582594662_003&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4227&quot;,&quot;ab&quot;:&quot;new&quot;}"> <input type="submit" class="btn-comment btn-comment-input" value="评论"> </a> 
+         </div> 
+        </div> 
+       </div> 
+      </form> 
+     </div> 
+     <div class="comment-list-container"> 
+      <div class="comment-list-box comment-operate-item"> 
+      </div> 
+      <div id="lookGoodComment" class="look-good-comment side-look-comment"> 
+       <a class="look-more-comment">查看更多评论<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowDownWhite.png" alt=""></a> 
+      </div> 
+      <div id="lookFlodComment" class="look-flod-comment"> 
+       <span class="count"></span>&nbsp;条评论被折叠&nbsp;
+       <a class="look-more-flodcomment">查看</a> 
+      </div> 
+      <div class="opt-box text-center"> 
+       <div class="btn btn-sm btn-link-blue" id="btnMoreComment"></div> 
+      </div> 
+     </div> 
+    </div> 
+    <div id="pcFlodCommentSideBox" class="pc-flodcomment-sidebox"> 
+     <div class="comment-fold-tit">
+      <span id="lookUnFlodComment" class="back"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowLeftWhite.png" alt=""></span>被折叠的&nbsp;
+      <span class="count"></span>&nbsp;条评论 
+      <a href="https://blogdev.blog.csdn.net/article/details/122245662" class="tip" target="_blank">为什么被折叠?</a> 
+      <a href="https://bbs.csdn.net/forums/FreeZone" class="park" target="_blank"> <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/iconPark.png">到【灌水乐园】发言</a> 
+     </div> 
+     <div class="comment-fold-content"></div> 
+     <div id="lookBadComment" class="look-bad-comment side-look-comment"> 
+      <a class="look-more-comment">查看更多评论<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowDownWhite.png" alt=""></a> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="comment-rewarddialog-box"> 
+    <div class="form-box"> 
+     <div class="title-box">
+       添加红包 
+      <a class="btn-form-close"></a> 
+     </div> 
+     <form id="commentRewardForm"> 
+      <div class="ipt-box"> 
+       <label for="txtName">祝福语</label> 
+       <div class="ipt-btn-box"> 
+        <input type="text" name="name" id="txtName" autocomplete="off" maxlength="50"> 
+        <a class="btn-ipt btn-random"></a> 
+       </div> 
+       <p class="notice">请填写红包祝福语或标题</p> 
+      </div> 
+      <div class="ipt-box"> 
+       <label for="txtSendAmount">红包数量</label> 
+       <div class="ipt-txt-box"> 
+        <input type="text" name="sendAmount" maxlength="4" id="txtSendAmount" placeholder="请填写红包数量(最小10个)" autocomplete="off"> 
+        <span class="after-txt">个</span> 
+       </div> 
+       <p class="notice">红包个数最小为10个</p> 
+      </div> 
+      <div class="ipt-box"> 
+       <label for="txtMoney">红包总金额</label> 
+       <div class="ipt-txt-box error"> 
+        <input type="text" name="money" maxlength="5" id="txtMoney" placeholder="请填写总金额(最低5元)" autocomplete="off"> 
+        <span class="after-txt">元</span> 
+       </div> 
+       <p class="notice">红包金额最低5元</p> 
+      </div> 
+      <div class="balance-info-box"> 
+       <label>余额支付</label> 
+       <div class="balance-info">
+         当前余额
+        <span class="balance">3.43</span>元 
+        <a href="https://i.csdn.net/#/wallet/balance/recharge" class="link-charge" target="_blank">前往充值 &gt;</a> 
+       </div> 
+      </div> 
+      <div class="opt-box"> 
+       <div class="pay-info">
+         需支付：
+        <span class="price">10.00</span>元 
+       </div> 
+       <button type="button" class="ml-auto btn-cancel">取消</button> 
+       <button type="button" class="ml8 btn-submit" disabled="true">确定</button> 
+      </div> 
+     </form> 
+    </div> 
+   </div> 
+   <div class="rr-guide-box"> 
+    <div class="rr-first-box"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward02.png" alt=""> 
+     <button class="btn-guide-known next">下一步</button> 
+    </div> 
+    <div class="rr-second-box"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward03.png" alt=""> 
+     <button class="btn-guide-known known">知道了</button> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="redEnvolope" id="redEnvolope"> 
+   <div class="env-box"> 
+    <div class="env-container"> 
+     <div class="pre-open" id="preOpen"> 
+      <div class="top"> 
+       <header> 
+        <img class="clearTpaErr" :src="redpacketAuthor.avatar" alt=""> 
+        <div class="author">
+         成就一亿技术人!
+        </div> 
+       </header> 
+       <div class="bot-icon"></div> 
+      </div> 
+      <footer> 
+       <div class="red-openbtn open-start"></div> 
+       <div class="tip">
+         领取后你会自动成为博主和红包主的粉丝 
+        <a class="rule" target="_blank">规则</a> 
+       </div> 
+      </footer> 
+     </div> 
+     <div class="opened" id="opened"> 
+      <div class="bot-icon"> 
+       <header> 
+        <a class="creatorUrl" href="" target="_blank"> <img class="clearTpaErr" src="https://profile-avatar.csdnimg.cn/default.jpg!2" alt=""> </a> 
+        <div class="author"> 
+         <div class="tt">
+          hope_wisdom
+         </div> 发出的红包 
+        </div> 
+       </header> 
+      </div> 
+      <div class="receive-box"> 
+       <header></header> 
+       <div class="receive-list"> 
+       </div> 
+      </div> 
+     </div> 
+    </div> 
+    <div class="close-btn"></div> 
+   </div> 
+  </div> 
+  <div class="pay-code"> 
+   <div class="pay-money">
+    实付
+    <span class="pay-money-span" data-nowprice="" data-oldprice="">元</span>
+   </div> 
+   <div class="content-blance">
+    <a class="blance-bt" href="javascript:;">使用余额支付</a>
+   </div> 
+   <div class="content-code"> 
+    <div id="payCode" data-id=""> 
+     <div class="renovate"> 
+      <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-time-out.png"> 
+      <span>点击重新获取</span> 
+     </div> 
+    </div> 
+    <div class="pay-style">
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/weixin.png"></span>
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/zhifubao.png"></span>
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/jingdong.png"></span>
+     <span class="text">扫码支付</span>
+    </div> 
+   </div> 
+   <div class="bt-close"> 
+    <svg t="1567152543821" class="icon" viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10924" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12"> 
+     <defs> 
+      <style type="text/css"></style> 
+     </defs> 
+     <path d="M512 438.378667L806.506667 143.893333a52.032 52.032 0 1 1 73.6 73.621334L585.621333 512l294.485334 294.485333a52.074667 52.074667 0 0 1-73.6 73.642667L512 585.621333 217.514667 880.128a52.053333 52.053333 0 1 1-73.621334-73.642667L438.378667 512 143.893333 217.514667a52.053333 52.053333 0 1 1 73.621334-73.621334L512 438.378667z" fill="" p-id="10925"></path> 
+    </svg> 
+   </div> 
+   <div class="pay-balance"> 
+    <input type="radio" class="pay-code-radio" data-type="details"> 
+    <span class="span">钱包余额</span> 
+    <span class="balance" style="color:#FC5531;font-size:14px;">0</span> 
+    <div class="pay-code-tile"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-help.png" alt=""> 
+     <div class="pay-code-content"> 
+      <div class="span"> 
+       <p class="title">抵扣说明：</p> 
+       <p> 1.余额是钱包充值的虚拟货币，按照1:1的比例进行支付金额的抵扣。<br> 2.余额无法直接购买下载，可以购买VIP、付费专栏及课程。</p> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+   <a class="pay-balance-con" href="https://i.csdn.net/#/wallet/balance/recharge" target="_blank"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/recharge.png" alt=""><span>余额充值</span></a> 
+  </div>  
+  <div class="keyword-dec-box" id="keywordDecBox"></div>       
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/cboxEditor/1.1.6/embed-editor.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-dark.css">                  
+ </body>
+</html>
